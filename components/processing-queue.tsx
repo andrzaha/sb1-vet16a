@@ -98,7 +98,7 @@ const queueItems = [
   },
 ];
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 8;
 
 interface ProcessingQueueProps {
   filter: string;

@@ -89,7 +89,7 @@ const jobs = [
   },
 ];
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 8;
 
 export function ScheduledJobs() {
   const [selectedJobs, setSelectedJobs] = useState<string[]>([]);
