@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import {
   FileText,
   LayoutDashboard,
@@ -14,8 +15,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Play,
+  LogIn,
 } from "lucide-react";
-import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -28,29 +29,24 @@ const sidebarNavItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Processing",
+    title: "File Processing",
     href: "/processing",
     icon: Play,
   },
   {
-    title: "History",
+    title: "Processing History",
     href: "/history",
     icon: FileText,
   },
   {
-    title: "Schemas",
-    href: "/schemas",
+    title: "Templates",
+    href: "/templates",
     icon: FileCode,
   },
   {
-    title: "Scheduler",
+    title: "Job Scheduler",
     href: "/scheduler",
     icon: Calendar,
-  },
-  {
-    title: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
   },
   {
     title: "Storage",
@@ -67,14 +63,19 @@ export function Sidebar() {
     <div
       className={cn(
         "relative flex h-screen border-r bg-background transition-all duration-300",
-        isCollapsed ? "w-16" : "w-64"
+        isCollapsed ? "w-20" : "w-52"
       )}
     >
       <div className="flex w-full flex-col">
         <div className="p-6">
           <div className="flex items-center gap-2">
-            <FileText className="h-6 w-6" />
-            {!isCollapsed && <span className="font-bold">DocProcessor</span>}
+            <Image
+              src="/icons/Paper_Parsley_Black_and_White_logo.png"
+              alt="PaperParsley Logo"
+              width={isCollapsed ? 24 : 32}
+              height={isCollapsed ? 24 : 32}
+            />
+            {!isCollapsed && <span className="font-bold">PaperParsley</span>}
           </div>
         </div>
         <Separator />
@@ -100,22 +101,32 @@ export function Sidebar() {
           </div>
         </ScrollArea>
         <div className="p-4 mt-auto border-t">
-          <div className="flex items-center justify-between">
-            <Button
-              variant="ghost"
-              className={cn(
-                "h-9 w-9 p-0",
-                !isCollapsed && "w-full justify-start px-3"
-              )}
-              asChild
-            >
-              <Link href="/settings" className="flex items-center gap-2">
-                <Settings className="h-4 w-4" />
-                {!isCollapsed && <span>Settings</span>}
-              </Link>
-            </Button>
-            {!isCollapsed && <ModeToggle />}
-          </div>
+          <Button
+            variant="ghost"
+            className={cn(
+              "h-9 w-9 p-0",
+              !isCollapsed && "w-full justify-start px-3"
+            )}
+            asChild
+          >
+            <Link href="/settings" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              {!isCollapsed && <span>Settings</span>}
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            className={cn(
+              "h-9 w-9 p-0 mt-2",
+              !isCollapsed && "w-full justify-start px-3"
+            )}
+            asChild
+          >
+            <Link href="/login" className="flex items-center gap-2">
+              <LogIn className="h-4 w-4" />
+              {!isCollapsed && <span>Login</span>}
+            </Link>
+          </Button>
         </div>
       </div>
       <Button

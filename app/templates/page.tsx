@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { DashboardShell } from "@/components/shell";
-import { SchemaList } from "@/components/schema-list";
+import { SchemaList } from "@/components/template-list";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -18,14 +18,14 @@ export default function SchemasPage() {
       <div className="flex flex-col gap-8 p-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Document Schemas</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Templates</h1>
             <p className="text-muted-foreground">
-              Manage document processing schemas and templates
+              Manage document processing templates
             </p>
           </div>
           <Button onClick={() => setShowSchemaCreator(true)}>
             <Plus className="mr-2 h-4 w-4" />
-            Create Schema
+            Create Template
           </Button>
         </div>
         
@@ -34,21 +34,21 @@ export default function SchemasPage() {
         <Sheet open={showSchemaCreator} onOpenChange={setShowSchemaCreator}>
           <SheetContent className="sm:max-w-xl">
             <SheetHeader>
-              <SheetTitle>Create New Schema</SheetTitle>
+              <SheetTitle>Create New Template</SheetTitle>
               <SheetDescription>
-                Define a new document processing schema with fields and rules
+                Define a new document processing template with fields and rules
               </SheetDescription>
             </SheetHeader>
             <div className="mt-6 space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Schema Name</Label>
-                <Input id="name" placeholder="e.g., Invoice Processing Schema" />
+                <Label htmlFor="name">Template Name</Label>
+                <Input id="name" placeholder="e.g., Invoice Processing Template" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea 
                   id="description" 
-                  placeholder="Describe the purpose and use case of this schema"
+                  placeholder="Describe the purpose and use case of this template"
                   className="min-h-[100px]"
                 />
               </div>

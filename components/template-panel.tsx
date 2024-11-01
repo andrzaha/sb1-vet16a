@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { FileText, HardDrive, Cog } from "lucide-react";
 
-interface Schema {
+interface Template {
   id: string;
   name: string;
   description: string;
@@ -21,23 +21,23 @@ interface Schema {
   processingRules: string[];
 }
 
-interface SchemaPanelProps {
-  schema: Schema | null;
+interface TemplatePanelProps {
+  template: Template | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 const supportedFormats = ["PDF", "JPG", "JPEG", "PNG", "BMP", "TIFF", "HEIC"];
 
-export function SchemaPanel({ schema, open, onOpenChange }: SchemaPanelProps) {
-  if (!schema) return null;
+export function TemplatePanel({ template, open, onOpenChange }: TemplatePanelProps) {
+  if (!template) return null;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
         <SheetHeader className="space-y-1">
-          <SheetTitle>{schema.name}</SheetTitle>
-          <SheetDescription>{schema.description}</SheetDescription>
+          <SheetTitle>{template.name}</SheetTitle>
+          <SheetDescription>{template.description}</SheetDescription>
         </SheetHeader>
         
         <div className="mt-6 space-y-6">
@@ -51,7 +51,7 @@ export function SchemaPanel({ schema, open, onOpenChange }: SchemaPanelProps) {
               {supportedFormats.map((format) => (
                 <Badge
                   key={format}
-                  variant={schema.fileTypes.includes(format) ? "default" : "secondary"}
+                  variant={template.fileTypes.includes(format) ? "default" : "secondary"}
                 >
                   {format}
                 </Badge>
@@ -70,7 +70,7 @@ export function SchemaPanel({ schema, open, onOpenChange }: SchemaPanelProps) {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Maximum file size:</span>
-                <span className="font-medium">{schema.maxFileSize} MB</span>
+                <span className="font-medium">{template.maxFileSize} MB</span>
               </div>
             </div>
           </div>
@@ -84,7 +84,7 @@ export function SchemaPanel({ schema, open, onOpenChange }: SchemaPanelProps) {
               <h3 className="font-semibold">Processing Rules</h3>
             </div>
             <ul className="space-y-2">
-              {schema.processingRules.map((rule) => (
+              {template.processingRules.map((rule) => (
                 <li key={rule} className="text-sm flex items-start gap-2">
                   <span className="text-muted-foreground">•</span>
                   <span>{rule}</span>
@@ -102,7 +102,7 @@ export function SchemaPanel({ schema, open, onOpenChange }: SchemaPanelProps) {
               <h3 className="font-semibold">Extracted Fields</h3>
             </div>
             <div className="flex flex-wrap gap-2">
-              {schema.fields.map((field) => (
+              {template.fields.map((field) => (
                 <Badge key={field} variant="outline">
                   {field}
                 </Badge>

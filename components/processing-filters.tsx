@@ -2,16 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 
-interface HistoryFiltersProps {
+interface ProcessingFiltersProps {
   activeFilter: string;
   onFilterChange: (filter: string) => void;
 }
 
-export function HistoryFilters({ activeFilter, onFilterChange }: HistoryFiltersProps) {
+export function ProcessingFilters({ activeFilter, onFilterChange }: ProcessingFiltersProps) {
   const filters = [
-    { id: "all", label: "All Documents" },
-    { id: "completed", label: "Completed" },
+    { id: "all", label: "All Files" },
+    { id: "queued", label: "Queued" },
     { id: "processing", label: "Processing" },
+    { id: "completed", label: "Completed" },
     { id: "failed", label: "Failed" },
   ];
 
@@ -28,4 +29,4 @@ export function HistoryFilters({ activeFilter, onFilterChange }: HistoryFiltersP
       ))}
     </div>
   );
-}
+} 

@@ -6,8 +6,10 @@ export function DashboardShell({
   ...props
 }: DashboardShellProps) {
   return (
-    <div className="container grid items-start gap-8 pb-8 pt-6">
-      {children}
+    <div className="container flex-1 overflow-auto">
+      <div className="grid items-start gap-8 pb-8 pt-6">
+        {children}
+      </div>
     </div>
   );
 }

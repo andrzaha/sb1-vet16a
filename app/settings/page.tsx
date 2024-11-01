@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardShell } from "@/components/shell";
-import { SettingsTabs } from "@/components/settings-tabs";
+import { Settings } from "@/components/settings";
 
 export default function SettingsPage() {
   return (
@@ -10,10 +10,10 @@ export default function SettingsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
           <p className="text-muted-foreground">
-            Manage your account and application preferences
+            Manage your document processing preferences and notifications
           </p>
         </div>
-        <SettingsTabs />
+        <Settings />
       </div>
     </DashboardShell>
   );

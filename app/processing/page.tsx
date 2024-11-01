@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { DashboardShell } from "@/components/shell";
 import { Button } from "@/components/ui/button";
-import { Upload, FolderOpen } from "lucide-react";
+import { Upload } from "lucide-react";
 import { ProcessingConfig } from "@/components/processing-config";
 import { ProcessingQueue } from "@/components/processing-queue";
+import { ProcessingFilters } from "@/components/processing-filters";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 export default function ProcessingPage() {
   const [showConfig, setShowConfig] = useState(false);
-  const [activeSource, setActiveSource] = useState("local");
+  const [filter, setFilter] = useState("all");
 
   return (
     <DashboardShell>
@@ -24,16 +25,17 @@ export default function ProcessingPage() {
           </div>
           <Button onClick={() => setShowConfig(true)}>
             <Upload className="mr-2 h-4 w-4" />
-            Process Documents
+            Documents
           </Button>
         </div>
 
-        <ProcessingQueue />
+        <ProcessingFilters activeFilter={filter} onFilterChange={setFilter} />
+        <ProcessingQueue filter={filter} />
 
         <Sheet open={showConfig} onOpenChange={setShowConfig}>
           <SheetContent className="sm:max-w-xl">
             <SheetHeader>
-              <SheetTitle>Process Documents</SheetTitle>
+              <SheetTitle>Add/Process Documents</SheetTitle>
               <SheetDescription>
                 Configure processing options and select files
               </SheetDescription>

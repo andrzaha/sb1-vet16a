@@ -27,9 +27,6 @@ export default function Header() {
             <Link href="/schemas" className="transition-colors hover:text-foreground/80">
               Schemas
             </Link>
-            <Link href="/analytics" className="transition-colors hover:text-foreground/80">
-              Analytics
-            </Link>
           </nav>
         </div>
         <div className="ml-auto flex items-center space-x-4">

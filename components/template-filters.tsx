@@ -2,17 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 
-interface HistoryFiltersProps {
+interface TemplateFiltersProps {
   activeFilter: string;
   onFilterChange: (filter: string) => void;
 }
 
-export function HistoryFilters({ activeFilter, onFilterChange }: HistoryFiltersProps) {
+export function TemplateFilters({ activeFilter, onFilterChange }: TemplateFiltersProps) {
   const filters = [
-    { id: "all", label: "All Documents" },
-    { id: "completed", label: "Completed" },
-    { id: "processing", label: "Processing" },
-    { id: "failed", label: "Failed" },
+    { id: "default", label: "Default Templates" },
+    { id: "user", label: "User-Created Templates" },
   ];
 
   return (
@@ -28,4 +26,4 @@ export function HistoryFilters({ activeFilter, onFilterChange }: HistoryFiltersP
       ))}
     </div>
   );
-}
+} 
