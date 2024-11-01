@@ -50,7 +50,7 @@ const documents = [
   {
     id: "1",
     name: "Financial Report Q4.pdf",
-    status: "processed", 
+    status: "completed", 
     type: "PDF",
     date: "2024-03-20",
     size: "2.4 MB",
@@ -58,7 +58,7 @@ const documents = [
   {
     id: "2", 
     name: "Product Brochure.jpg",
-    status: "processed",
+    status: "completed",
     type: "JPG",
     date: "2024-03-19",
     size: "3.1 MB",
@@ -75,7 +75,7 @@ const documents = [
   {
     id: "4",
     name: "Company Logo.png",
-    status: "processed",
+    status: "completed",
     type: "PNG",
     date: "2024-03-17",
     size: "256 KB",
@@ -91,7 +91,7 @@ const documents = [
   {
     id: "6", 
     name: "Team Photo.jpeg",
-    status: "processed",
+    status: "completed",
     type: "JPEG",
     date: "2024-03-15",
     size: "4.2 MB",
@@ -116,7 +116,7 @@ const documents = [
   {
     id: "9",
     name: "User Manual.pdf",
-    status: "processed",
+    status: "completed",
     type: "PDF",
     date: "2024-03-12",
     size: "3.4 MB",
@@ -124,14 +124,14 @@ const documents = [
   {
     id: "10",
     name: "Banner Design.webp",
-    status: "processed", 
+    status: "completed", 
     type: "WEBP",
     date: "2024-03-11",
     size: "567 KB",
   },
 ];
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 8;
 
 export function HistoryList({ filter }: HistoryListProps) {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
@@ -196,7 +196,7 @@ export function HistoryList({ filter }: HistoryListProps) {
       label: "Export Results",
       onClick: handleExport,
       disabled: !selectedDocs.some(id => 
-        documents.find(doc => doc.id === id)?.status === "processed"
+        documents.find(doc => doc.id === id)?.status === "completed"
       ),
     },
     {
@@ -205,7 +205,7 @@ export function HistoryList({ filter }: HistoryListProps) {
       onClick: () => setEditingConfig(selectedDocs[0]),
       disabled: selectedDocs.some(id => {
         const doc = documents.find(d => d.id === id);
-        return doc?.status !== "failed" && doc?.status !== "processed";
+        return doc?.status !== "failed" && doc?.status !== "completed";
       }),
     },
     {
@@ -214,7 +214,7 @@ export function HistoryList({ filter }: HistoryListProps) {
       onClick: () => handleReprocess(),
       disabled: selectedDocs.some(id => {
         const doc = documents.find(d => d.id === id);
-        return doc?.status !== "failed" && doc?.status !== "processed";
+        return doc?.status !== "failed" && doc?.status !== "completed";
       }),
     },
     {
@@ -307,7 +307,7 @@ export function HistoryList({ filter }: HistoryListProps) {
                   ) : (
                     <Badge
                       variant={
-                        doc.status === "processed"
+                        doc.status === "completed"
                           ? "success"
                           : doc.status === "processing"
                           ? "default"
@@ -326,7 +326,7 @@ export function HistoryList({ filter }: HistoryListProps) {
                     <DocumentActions 
                       onPreview={() => handlePreview(doc.id)}
                       onViewResults={() => handleViewResults(doc.id)}
-                      showResults={doc.status === "processed"}
+                      showResults={doc.status === "completed"}
                     />
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
