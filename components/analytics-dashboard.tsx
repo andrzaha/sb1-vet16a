@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { FileText, TrendingUp, AlertCircle, Clock, CheckCircle2, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useEffect, useState } from "react";
 
 const dailyProcessing = [
   { name: "Mon", total: 120 },
@@ -67,6 +68,16 @@ const recentErrors = [
 ];
 
 export function AnalyticsDashboard() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // or a loading spinner
+  }
+
   return (
     <div className="space-y-8">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
