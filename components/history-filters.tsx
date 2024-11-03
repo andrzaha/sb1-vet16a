@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 interface HistoryFiltersProps {
@@ -8,12 +9,12 @@ interface HistoryFiltersProps {
 }
 
 export function HistoryFilters({ activeFilter, onFilterChange }: HistoryFiltersProps) {
-  const filters = [
+  const filters = React.useMemo(() => [
     { id: "all", label: "All Documents" },
     { id: "completed", label: "Completed" },
     { id: "processing", label: "Processing" },
     { id: "failed", label: "Failed" },
-  ];
+  ], []);
 
   return (
     <div className="flex space-x-2">
@@ -21,7 +22,13 @@ export function HistoryFilters({ activeFilter, onFilterChange }: HistoryFiltersP
         <Button
           key={filter.id}
           variant={activeFilter === filter.id ? "secondary" : "ghost"}
-          onClick={() => onFilterChange(filter.id)}
+          onClick={() => {
+            try {
+              onFilterChange(filter.id);
+            } catch (error) {
+              console.error("Error changing filter:", error);
+            }
+          }}
         >
           {filter.label}
         </Button>

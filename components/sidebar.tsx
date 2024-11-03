@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 
 const sidebarNavItems = [
   {
@@ -59,6 +59,44 @@ export function Sidebar() {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const memoizedSidebarNavItems = useMemo(() => sidebarNavItems, [sidebarNavItems]);
+
+  const toggleCollapse = useCallback(() => {
+    setIsCollapsed((prev) => !prev);
+  }, []);
+
+  const SettingsButton = ({ isCollapsed }) => (
+    <Button
+      variant="ghost"
+      className={cn(
+        "h-9 w-9 p-0",
+        !isCollapsed && "w-full justify-start px-3"
+      )}
+      asChild
+    >
+      <Link href="/settings" className="flex items-center gap-2">
+        <Settings className="h-4 w-4" />
+        {!isCollapsed && <span>Settings</span>}
+      </Link>
+    </Button>
+  );
+
+  const LoginButton = ({ isCollapsed }) => (
+    <Button
+      variant="ghost"
+      className={cn(
+        "h-9 w-9 p-0 mt-2",
+        !isCollapsed && "w-full justify-start px-3"
+      )}
+      asChild
+    >
+      <Link href="/login" className="flex items-center gap-2">
+        <LogIn className="h-4 w-4" />
+        {!isCollapsed && <span>Login</span>}
+      </Link>
+    </Button>
+  );
+
   return (
     <div
       className={cn(
@@ -81,7 +119,7 @@ export function Sidebar() {
         <Separator />
         <ScrollArea className="flex-1 px-3">
           <div className="space-y-1 py-4">
-            {sidebarNavItems.map((item) => (
+            {memoizedSidebarNavItems.map((item) => (
               <Button
                 key={item.href}
                 variant={pathname === item.href ? "secondary" : "ghost"}
@@ -101,39 +139,15 @@ export function Sidebar() {
           </div>
         </ScrollArea>
         <div className="p-4 mt-auto border-t">
-          <Button
-            variant="ghost"
-            className={cn(
-              "h-9 w-9 p-0",
-              !isCollapsed && "w-full justify-start px-3"
-            )}
-            asChild
-          >
-            <Link href="/settings" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              {!isCollapsed && <span>Settings</span>}
-            </Link>
-          </Button>
-          <Button
-            variant="ghost"
-            className={cn(
-              "h-9 w-9 p-0 mt-2",
-              !isCollapsed && "w-full justify-start px-3"
-            )}
-            asChild
-          >
-            <Link href="/login" className="flex items-center gap-2">
-              <LogIn className="h-4 w-4" />
-              {!isCollapsed && <span>Login</span>}
-            </Link>
-          </Button>
+          <SettingsButton isCollapsed={isCollapsed} />
+          <LoginButton isCollapsed={isCollapsed} />
         </div>
       </div>
       <Button
         variant="ghost"
         size="icon"
         className="absolute -right-4 top-6 z-10 h-8 w-8 rounded-full border bg-background"
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={toggleCollapse}
       >
         {isCollapsed ? (
           <ChevronRight className="h-4 w-4" />

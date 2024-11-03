@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { logger } from "@/utils/logger";
+
 import {
   Table,
   TableBody,
@@ -136,15 +138,27 @@ const ITEMS_PER_PAGE = 8;
 export function HistoryList({ filter }: HistoryListProps) {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  
-  const filteredDocs = filter === "all" 
-    ? documents 
-    : documents.filter(doc => doc.status === filter);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredDocs.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedDocs = filteredDocs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const getFilteredDocs = (filter: string) => {
+    return filter === "all" 
+      ? documents 
+      : documents.filter(doc => doc.status === filter);
+  };
+
+  const getPaginatedDocs = (docs: Document[], currentPage: number) => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return docs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  };
+
+  const filteredDocs = useMemo(() => getFilteredDocs(filter), [filter, documents]);
+  const paginatedDocs = useMemo(() => getPaginatedDocs(filteredDocs, currentPage), [filteredDocs, currentPage]);
+  const totalPages = Math.ceil(filteredDocs.length / ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    setSelectedDocs([]);
+  }, [paginatedDocs]);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -163,29 +177,29 @@ export function HistoryList({ filter }: HistoryListProps) {
   };
 
   const handleProcess = () => {
-    console.log("Processing documents:", selectedDocs);
+    logger.info("Processing documents:", selectedDocs);
   };
 
   const handleReprocess = (options?: ProcessingOptions) => {
-    console.log("Reprocessing documents:", selectedDocs, options);
+    logger.info("Reprocessing documents:", selectedDocs, options);
     setEditingConfig(null);
   };
 
   const handleDelete = () => {
-    console.log("Deleting documents:", selectedDocs);
+    logger.info("Deleting documents:", selectedDocs);
     setSelectedDocs([]); // Clear selection after delete
   };
 
   const handlePreview = (docId: string) => {
-    console.log("Preview document:", docId);
+    logger.info("Preview document:", docId);
   };
 
   const handleViewResults = (docId: string) => {
-    console.log("View results for document:", docId);
+    logger.info("View results for document:", docId);
   };
 
   const handleExport = () => {
-    console.log("Exporting results for documents:", selectedDocs);
+    logger.info("Exporting results for documents:", selectedDocs);
   };
 
   const [editingConfig, setEditingConfig] = useState<string | null>(null);

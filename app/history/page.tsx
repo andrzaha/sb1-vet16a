@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo } from "react";
 import { DashboardShell } from "@/components/shell";
 import { HistoryList } from "@/components/history-list";
 import { HistoryFilters } from "@/components/history-filters";
 
 export default function DocumentsPage() {
   const [filter, setFilter] = useState("all");
+
+  const MemoizedHistoryFilters = memo(HistoryFilters);
+  const MemoizedHistoryList = memo(HistoryList);
 
   return (
     <DashboardShell>
@@ -18,8 +21,8 @@ export default function DocumentsPage() {
           </p>
         </div>
 
-        <HistoryFilters activeFilter={filter} onFilterChange={setFilter} />
-        <HistoryList filter={filter} />
+        <MemoizedHistoryFilters activeFilter={filter} onFilterChange={setFilter} />
+        <MemoizedHistoryList filter={filter} />
       </div>
     </DashboardShell>
   );
