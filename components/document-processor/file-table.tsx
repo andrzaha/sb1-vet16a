@@ -99,24 +99,10 @@ export function FileTable({ files, onFileSelect, onRowSelectionChange }: FileTab
       },
       cell: ({ row }) => {
         const status = row.getValue("status") as FileStatus
-        const runtime = row.original.runtime
-        
         return (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center justify-center">
-                  {getStatusIcon(status)}
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <div className="text-sm">
-                  <p>Status: {status}</p>
-                  {runtime && <p>Runtime: {runtime}s</p>}
-                </div>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <div className="flex justify-center">
+            {getStatusIcon(status)}
+          </div>
         )
       },
     },
@@ -145,57 +131,6 @@ export function FileTable({ files, onFileSelect, onRowSelectionChange }: FileTab
       cell: ({ row }) => (
         <Progress value={row.getValue("progress")} className="w-[100px] h-1" />
       ),
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => {
-        const file = row.original
-        return (
-          <div className="flex justify-end gap-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={file.status !== 'queued'}
-                  >
-                    <Upload className="w-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  Process
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Settings className="w-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  Settings
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className="hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-900/30"
-                  >
-                    <Trash2 className="w-4 w-4 text-red-500" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  Delete
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        )
-      },
     },
   ]
 

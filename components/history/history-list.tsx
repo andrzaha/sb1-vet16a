@@ -250,7 +250,6 @@ export function HistoryList({ filter }: HistoryListProps) {
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="w-full"
         >
           Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -300,34 +299,6 @@ export function HistoryList({ filter }: HistoryListProps) {
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }) => {
-        const doc = row.original;
-        return (
-          <div className="flex items-center justify-end gap-2">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => handleReprocess(doc.id)}
-              title="Reprocess"
-            >
-              <RotateCw className="h-4 w-4" />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => handleDelete(doc.id)}
-              title="Delete"
-              className="text-destructive hover:text-destructive"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
-        );
-      },
     },
   ];
 
@@ -478,33 +449,30 @@ export function HistoryList({ filter }: HistoryListProps) {
             </Table>
 
             <div className="flex items-center justify-between py-4">
-              <div className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Showing {table.getState().pagination.pageIndex * ITEMS_PER_PAGE + 1} to{" "}
                 {Math.min(
                   (table.getState().pagination.pageIndex + 1) * ITEMS_PER_PAGE,
                   filteredDocs.length
                 )}{" "}
                 of {filteredDocs.length} entries
-              </div>
+              </p>
               <div className="flex items-center space-x-2">
                 <Button
                   variant="outline"
-                  size="icon"
+                  size="sm"
                   onClick={handlePreviousPage}
                   disabled={!table.getCanPreviousPage()}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  Previous
                 </Button>
-                <div className="text-sm min-w-[100px] text-center">
-                  Page {currentPage} of {totalPages}
-                </div>
                 <Button
                   variant="outline"
-                  size="icon"
+                  size="sm"
                   onClick={handleNextPage}
                   disabled={!table.getCanNextPage()}
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  Next
                 </Button>
               </div>
             </div>

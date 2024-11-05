@@ -88,132 +88,15 @@ export function DocumentProcessor() {
 
   return (
     <div className="container mx-auto p-6 space-y-8 max-w-full overflow-x-hidden">
-      <div className="flex justify-between items-center relative">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Document Processing</h1>
           <p className="text-muted-foreground">Process documents from local storage or cloud providers</p>
         </div>
-        <div className="absolute right-0 top-0">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="lg">
-                <Upload className="w-4 h-4 mr-2" />
-                Documents
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="w-[400px] sm:w-[540px]">
-              <SheetHeader>
-                <SheetTitle>Add/Process Documents</SheetTitle>
-              </SheetHeader>
-              <div className="grid gap-6 mt-4">
-                <Tabs defaultValue="local">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="local">Local Files</TabsTrigger>
-                    <TabsTrigger value="cloud">Cloud Storage</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="local" className="space-y-4">
-                    <div className="border-2 border-dashed rounded-lg p-6 text-center">
-                      <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground mb-2">
-                        Drag and drop files here or click to browse
-                      </p>
-                      <Button>Choose Files</Button>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="cloud" className="space-y-4">
-                    <Select value={cloudProvider} onValueChange={(value: FileSource) => setCloudProvider(value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select storage provider" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="s3">Amazon S3</SelectItem>
-                        <SelectItem value="azure">Azure Blob Storage</SelectItem>
-                        <SelectItem value="gcs">Google Cloud Storage</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <div className="flex items-center space-x-2">
-                      <FolderTree className="w-4 h-4" />
-                      <Input 
-                        placeholder={`Enter ${cloudProvider} file path`}
-                        value={cloudPath}
-                        onChange={(e) => setCloudPath(e.target.value)}
-                      />
-                    </div>
-                  </TabsContent>
-                </Tabs>
-                <div className="space-y-4">
-                  <h4 className="font-medium">Processing Options</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="extract" 
-                        checked={extractionEnabled}
-                        onCheckedChange={(checked) => setExtractionEnabled(checked as boolean)}
-                      />
-                      <label htmlFor="extract" className="text-sm">
-                        Enable Key Information Extraction
-                      </label>
-                    </div>
-                    {extractionEnabled && (
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className="w-full justify-between"
-                          >
-                            {selectedSchema
-                              ? schemas.find((schema) => schema.value === selectedSchema)?.label
-                              : "Select schema..."}
-                            <ArrowUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
-                          <Command>
-                            <CommandInput placeholder="Search schema..." />
-                            <CommandEmpty>No schema found.</CommandEmpty>
-                            <CommandGroup>
-                              {schemas.map((schema) => (
-                                <CommandItem
-                                  key={schema.value}
-                                  value={schema.value}
-                                  onSelect={() => {
-                                    setSelectedSchema(schema.value === selectedSchema ? "" : schema.value)
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      selectedSchema === schema.value ? "opacity-100" : "opacity-0"
-                                    )}
-                                  />
-                                  {schema.label}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    )}
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="immediate" />
-                      <label htmlFor="immediate" className="text-sm">
-                        Process Immediately
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox id="metadata" defaultChecked />
-                      <label htmlFor="metadata" className="text-sm">
-                        Extract Metadata
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <Button>Save</Button>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+        <Button onClick={() => setShowConfig(true)}>
+          <Upload className="mr-2 h-4 w-4" />
+          Documents
+        </Button>
       </div>
 
       <div className="flex space-x-2">

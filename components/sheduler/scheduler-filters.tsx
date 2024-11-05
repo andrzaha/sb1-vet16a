@@ -10,7 +10,8 @@ interface SchedulerFiltersProps {
 export function SchedulerFilters({ activeFilter, onFilterChange }: SchedulerFiltersProps) {
   const filters = [
     { id: "all", label: "All Jobs" },
-    { id: "active", label: "Active Jobs" },
+    { id: "running", label: "Running Jobs" },
+    { id: "queued", label: "Queued Jobs" },
     { id: "paused", label: "Paused Jobs" },
   ];
 
@@ -21,6 +22,7 @@ export function SchedulerFilters({ activeFilter, onFilterChange }: SchedulerFilt
           key={filter.id}
           variant={activeFilter === filter.id ? "secondary" : "ghost"}
           onClick={() => onFilterChange(filter.id)}
+          className="min-w-[120px] justify-center"
         >
           {filter.label}
         </Button>
