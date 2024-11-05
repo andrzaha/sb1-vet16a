@@ -79,7 +79,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@onlook/nextjs": "^2.1.1",
     "happy-dom": "^15.8.2"
   }
 }
