@@ -14,10 +14,14 @@ export default function HistoryPage() {
   return (
     <DashboardShell>
       <div className="container mx-auto p-6 space-y-8 max-w-full overflow-x-hidden">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center relative">
           <div>
             <h1 className="text-3xl font-bold">Document History</h1>
             <p className="text-muted-foreground">View and manage processed documents</p>
+          </div>
+          <div className="absolute right-0 top-0">
+            {/* Add your action buttons or components here */}
+            {/* Example: <Button>Upload</Button> */}
           </div>
         </div>
         
