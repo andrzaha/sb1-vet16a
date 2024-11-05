@@ -378,12 +378,23 @@ export function HistoryList({ filter }: HistoryListProps) {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
+    <div className="flex flex-col gap-8">
+      <div className="flex space-x-2">
+        {(['all', 'queued', 'processing', 'completed', 'failed'] as const).map(status => (
+          <Button
+            key={status}
+            variant={filter === status ? "secondary" : "ghost"}
+            onClick={() => setActiveTab(status)}
+            className="min-w-[120px] justify-center"
+          >
+            {status === 'all' ? 'All Documents' : 
+             status.charAt(0).toUpperCase() + status.slice(1)}
+          </Button>
+        ))}
+      </div>
+
       <div className="relative flex gap-6">
-        <Card className={cn(
-          "flex-grow transition-all duration-150 ease-out", 
-          isPreviewOpen ? "w-1/2" : "w-full"
-        )}>
+        <Card className="flex-grow">
           <CardContent className="p-6">
             <div className="flex items-center justify-between py-4">
               <div className="relative flex-grow max-w-sm">
@@ -440,6 +451,33 @@ export function HistoryList({ filter }: HistoryListProps) {
                 )}
               </TableBody>
             </Table>
+
+            <div className="flex items-center justify-between py-4">
+              <div className="text-sm text-muted-foreground">
+                Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, filteredDocs.length)} of {filteredDocs.length} entries
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="text-sm min-w-[100px] text-center">
+                  Page {currentPage} of {totalPages}
+                </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -457,33 +495,6 @@ export function HistoryList({ filter }: HistoryListProps) {
             />
           </DialogContent>
         </Dialog>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
-          Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, filteredDocs.length)} of {filteredDocs.length} entries
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <div className="text-sm min-w-[100px] text-center">
-            Page {currentPage} of {totalPages}
-          </div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { DashboardShell } from "@/components/shell";
 import { HistoryList } from "@/components/history/history-list";
 import { HistoryFilters } from "@/components/history/history-filters";
 
-export default function DocumentsPage() {
+export default function HistoryPage() {
   const [filter, setFilter] = useState("all");
 
   const MemoizedHistoryFilters = memo(HistoryFilters);
@@ -13,17 +13,14 @@ export default function DocumentsPage() {
 
   return (
     <DashboardShell>
-      <div className="flex flex-col gap-8 p-8 min-h-0">
-        <div className="flex items-center justify-between">
+      <div className="container mx-auto p-6 space-y-8 max-w-full overflow-x-hidden">
+        <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Processing History</h1>
-          <p className="text-muted-foreground">
-            View and manage your processed documents
-            </p>
+            <h1 className="text-3xl font-bold">Document History</h1>
+            <p className="text-muted-foreground">View and manage processed documents</p>
           </div>
         </div>
-
-        <MemoizedHistoryFilters activeFilter={filter} onFilterChange={setFilter} />
+        
         <MemoizedHistoryList filter={filter} />
       </div>
     </DashboardShell>
