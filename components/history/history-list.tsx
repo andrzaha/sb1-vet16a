@@ -32,11 +32,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
 import { FloatingActionPill } from "@/components/floating-action-pill";
-import { DocumentActions } from "@/components/document-actions";
+import { DocumentActions } from "@/components/history/document-actions";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { ProcessingConfig } from "@/components/processing-config";
+import { ProcessingConfig } from "@/components/history/processing-config";
 import {
   Tooltip,
   TooltipContent,

@@ -2,8 +2,8 @@
 
 import { useState, memo } from "react";
 import { DashboardShell } from "@/components/shell";
-import { HistoryList } from "@/components/history-list";
-import { HistoryFilters } from "@/components/history-filters";
+import { HistoryList } from "@/components/history/history-list";
+import { HistoryFilters } from "@/components/history/history-filters";
 
 export default function DocumentsPage() {
   const [filter, setFilter] = useState("all");

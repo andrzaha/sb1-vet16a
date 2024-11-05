@@ -21,7 +21,7 @@ import {
 import { Play, Pause, Trash2, MoreHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { FloatingActionPill } from "@/components/floating-action-pill";
-import { SchedulerFilters } from "@/components/scheduler-filters";
+import { SchedulerFilters } from "@/components/sheduler/scheduler-filters";
 
 const jobs = [
   {

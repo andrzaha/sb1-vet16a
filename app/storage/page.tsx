@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { DashboardShell } from "@/components/shell";
-import { StorageConfig } from "@/components/storage-config";
+import { StorageConfig } from "@/components/storage/storage-config";
 import { Button } from "@/components/ui/button";
 import { Settings, Cloud } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";

@@ -29,7 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { TemplateFilters } from "@/components/template-filters";
+import { TemplateFilters } from "./template-filters";
 
 const templates = [
   {

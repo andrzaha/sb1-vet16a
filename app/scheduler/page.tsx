@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { DashboardShell } from "@/components/shell";
-import { SchedulerConfig } from "@/components/scheduler-config";
-import { ScheduledJobs } from "@/components/scheduled-jobs";
+import { SchedulerConfig } from "@/components/sheduler/scheduler-config";
+import { ScheduledJobs } from "@/components/sheduler/scheduled-jobs";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
