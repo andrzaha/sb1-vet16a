@@ -132,7 +132,11 @@ export function FileTable({ files, onFileSelect }: FileTableProps) {
           </Button>
         )
       },
-      cell: ({ row }) => <Badge variant="outline">{row.getValue("source")}</Badge>,
+      cell: ({ row }) => (
+        <div className="flex justify-start">
+          <Badge variant="outline">{row.getValue("source")}</Badge>
+        </div>
+      ),
     },
     {
       accessorKey: "progress",
@@ -175,8 +179,12 @@ export function FileTable({ files, onFileSelect }: FileTableProps) {
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <Trash2 className="w-4 w-4" />
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-900/30"
+                  >
+                    <Trash2 className="w-4 w-4 text-red-500" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
