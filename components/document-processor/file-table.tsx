@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { 
-  Upload, FileText, Settings, Trash2, ArrowUpDown, Check 
+  Upload, FileText, Settings, Trash2, ArrowUpDown, Check, Search 
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -31,9 +31,10 @@ import { getStatusIcon } from './status-utils'
 interface FileTableProps {
   files: ProcessingFile[]
   onFileSelect: (file: ProcessingFile) => void
+  onRowSelectionChange: (selection: Record<string, boolean>) => void
 }
 
-export function FileTable({ files, onFileSelect }: FileTableProps) {
+export function FileTable({ files, onFileSelect, onRowSelectionChange }: FileTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -208,7 +209,10 @@ export function FileTable({ files, onFileSelect }: FileTableProps) {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (updatedSelection) => {
+      setRowSelection(updatedSelection)
+      onRowSelectionChange(updatedSelection)
+    },
     state: {
       sorting,
       columnFilters,
@@ -220,14 +224,17 @@ export function FileTable({ files, onFileSelect }: FileTableProps) {
   return (
     <>
       <div className="flex items-center justify-between py-4">
-        <Input
-          placeholder="Filter files..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <div className="relative max-w-sm">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by file name..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="pl-8 max-w-sm"
+          />
+        </div>
       </div>
       <Table>
         <TableHeader>

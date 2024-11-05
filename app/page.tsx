@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <DashboardShell>
-      <div className="flex flex-col gap-8 p-8">
+      <div className="container mx-auto p-6 space-y-8 max-w-full">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Welcome, {userName}!</h1>
           <p className="text-muted-foreground">

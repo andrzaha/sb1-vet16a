@@ -12,10 +12,10 @@ export default function SchedulerPage() {
 
   return (
     <DashboardShell>
-      <div className="flex flex-col gap-8 p-8">
-        <div className="flex items-center justify-between">
+      <div className="container mx-auto p-6 space-y-8 max-w-full">
+        <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Job Scheduler</h1>
+            <h1 className="text-3xl font-bold">Job Scheduler</h1>
             <p className="text-muted-foreground">
               Configure automated document processing jobs
             </p>
@@ -25,7 +25,13 @@ export default function SchedulerPage() {
             New Job
           </Button>
         </div>
-        <ScheduledJobs />
+
+        <div className="relative flex gap-6">
+          <div className="flex-grow w-full">
+            <ScheduledJobs />
+          </div>
+        </div>
+
         <SchedulerConfig open={showConfig} onOpenChange={setShowConfig} />
       </div>
     </DashboardShell>

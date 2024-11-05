@@ -15,10 +15,10 @@ export default function SchemasPage() {
 
   return (
     <DashboardShell>
-      <div className="flex flex-col gap-8 p-8">
-        <div className="flex items-center justify-between">
+      <div className="container mx-auto p-6 space-y-8 max-w-full">
+        <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Templates</h1>
+            <h1 className="text-3xl font-bold">Templates</h1>
             <p className="text-muted-foreground">
               Manage document processing templates
             </p>
@@ -28,8 +28,12 @@ export default function SchemasPage() {
             Create Template
           </Button>
         </div>
-        
-        <SchemaList />
+
+        <div className="relative flex gap-6">
+          <div className="flex-grow w-full">
+            <SchemaList />
+          </div>
+        </div>
 
         <Sheet open={showSchemaCreator} onOpenChange={setShowSchemaCreator}>
           <SheetContent className="sm:max-w-xl">

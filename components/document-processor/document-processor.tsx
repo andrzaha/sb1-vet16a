@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useEffect } from 'react'
-import { Upload, FolderTree, ArrowUpDown, Check } from 'lucide-react'
+import { Upload, FolderTree, ArrowUpDown, Check, Play, Trash2, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
+import { FloatingActionPill } from '@/components/floating-action-pill'
 
 import { ProcessingFile, FileSource, schemas } from './types'
 import { FileTable } from './file-table'
@@ -35,6 +36,43 @@ export function DocumentProcessor() {
   const [cloudPath, setCloudPath] = useState('')
   const [extractionEnabled, setExtractionEnabled] = useState(false)
   const [selectedSchema, setSelectedSchema] = useState<string>('')
+
+  const [selectedRows, setSelectedRows] = useState<Record<string, boolean>>({})
+
+  // Calculate selected count
+  const selectedCount = Object.values(selectedRows).filter(Boolean).length
+
+  // Define actions for selected files
+  const actions = [
+    {
+      icon: <Play className="w-4 h-4" />,
+      label: "Process",
+      onClick: () => {
+        // Handle processing selected files
+        console.log("Processing selected files")
+      },
+      disabled: false,
+    },
+    {
+      icon: <Settings className="w-4 h-4" />,
+      label: "Settings",
+      onClick: () => {
+        // Handle settings for selected files
+        console.log("Opening settings for selected files")
+      },
+      disabled: false,
+    },
+    {
+      icon: <Trash2 className="w-4 h-4" />,
+      label: "Delete",
+      onClick: () => {
+        // Handle deleting selected files
+        console.log("Deleting selected files")
+      },
+      variant: "destructive" as const,
+      disabled: false,
+    },
+  ]
 
   // Filter files based on active tab
   const filteredFiles = useMemo(() => {
@@ -203,7 +241,8 @@ export function DocumentProcessor() {
               onFileSelect={(file) => {
                 setSelectedFile(file)
                 setShowFileResults(true)
-              }} 
+              }}
+              onRowSelectionChange={setSelectedRows}
             />
           </CardContent>
         </Card>
@@ -214,6 +253,11 @@ export function DocumentProcessor() {
           onToggleFileResults={() => setShowFileResults(!showFileResults)}
         />
       </div>
+
+      <FloatingActionPill
+        selectedCount={selectedCount}
+        actions={actions}
+      />
     </div>
   )
 }

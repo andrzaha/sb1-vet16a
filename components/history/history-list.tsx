@@ -422,17 +422,17 @@ export function HistoryList({ filter }: HistoryListProps) {
         <Card className="flex-grow">
           <CardContent className="p-6">
             <div className="flex items-center justify-between py-4">
-              <div className="relative flex-grow max-w-sm">
+              <div className="relative max-w-sm">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input 
-                  placeholder="Search by file name"
+                  placeholder="Search by file name..."
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="pl-10"
+                  className="pl-8 max-w-sm"
                 />
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
               </div>
             </div>
 
