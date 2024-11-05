@@ -23,6 +23,7 @@ export function ProcessingFilters({ activeFilter, onFilterChange }: ProcessingFi
           key={filter.id}
           variant={activeFilter === filter.id ? "secondary" : "ghost"}
           onClick={() => onFilterChange(filter.id)}
+          className="min-w-[120px] justify-center"
         >
           {filter.label}
         </Button>

@@ -133,7 +133,7 @@ const documents = [
   },
 ];
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 6;
 
 export function HistoryList({ filter }: HistoryListProps) {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
@@ -242,7 +242,7 @@ export function HistoryList({ filter }: HistoryListProps) {
   return (
     <div className="flex flex-col gap-4 relative">
       <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground min-w-[200px]">
           Showing {startIndex + 1} to {Math.min(startIndex + ITEMS_PER_PAGE, filteredDocs.length)} of {filteredDocs.length} entries
         </div>
         <div className="flex items-center space-x-2">
@@ -254,7 +254,7 @@ export function HistoryList({ filter }: HistoryListProps) {
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <div className="text-sm">
+          <div className="text-sm min-w-[100px] text-center">
             Page {currentPage} of {totalPages}
           </div>
           <Button

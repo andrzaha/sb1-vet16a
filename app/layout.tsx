@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
-import { Sidebar } from '@/components/sidebar';
+import { AppSidebar } from "@/components/sidebar"
 import { cn } from '@/lib/utils';
 import { JetBrains_Mono } from "next/font/google";
 
@@ -32,9 +32,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-screen">
-            <Sidebar />
-            <main className="flex-1">{children}</main>
+          <div className="flex min-h-screen">
+            <AppSidebar />
+            <main className="flex-1 overflow-hidden">
+              {children}
+            </main>
           </div>
           <Toaster />
         </ThemeProvider>

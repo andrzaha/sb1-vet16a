@@ -127,7 +127,7 @@ export function SchemaList() {
       <TemplateFilters activeFilter={filter} onFilterChange={setFilter} />
 
       <div className="flex justify-between items-center">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground min-w-[200px]">
           {filteredTemplates.length} templates available
         </div>
         <div className="flex items-center gap-2">
@@ -148,9 +148,12 @@ export function SchemaList() {
         </div>
       </div>
 
-      <div className="transition-all duration-300 ease-in-out">
+      <div className="relative">
         {viewMode === "grid" ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 animate-in fade-in-50 duration-300">
+          <div 
+            key="grid-view"
+            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 animate-in fade-in-0 duration-200"
+          >
             {filteredTemplates.map((template) => (
               <Card key={template.id} className="relative group bg-card">
                 <CardContent className="p-6">
@@ -192,7 +195,10 @@ export function SchemaList() {
             ))}
           </div>
         ) : (
-          <div className="rounded-md border bg-card animate-in fade-in-50 duration-300">
+          <div 
+            key="table-view"
+            className="rounded-md border bg-card animate-in fade-in-0 duration-200"
+          >
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-muted/50">

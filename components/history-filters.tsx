@@ -29,6 +29,7 @@ export function HistoryFilters({ activeFilter, onFilterChange }: HistoryFiltersP
               console.error("Error changing filter:", error);
             }
           }}
+          className="min-w-[120px] justify-center"
         >
           {filter.label}
         </Button>

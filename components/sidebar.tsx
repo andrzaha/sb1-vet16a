@@ -1,26 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 import {
   FileText,
   LayoutDashboard,
   Settings,
   FileCode,
-  BarChart3,
   Calendar,
   Cloud,
-  ChevronLeft,
-  ChevronRight,
-  Play,
   LogIn,
+  Play,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const sidebarNavItems = [
   {
@@ -55,55 +50,32 @@ const sidebarNavItems = [
   },
 ];
 
-export function Sidebar() {
+export function AppSidebar() {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const memoizedSidebarNavItems = useMemo(() => sidebarNavItems, [sidebarNavItems]);
+  // Auto-collapse on mobile screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsCollapsed(true);
+      } else {
+        setIsCollapsed(false);
+      }
+    };
 
-  const toggleCollapse = useCallback(() => {
-    setIsCollapsed((prev) => !prev);
+    // Initial check
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const SettingsButton = ({ isCollapsed }) => (
-    <Button
-      variant="ghost"
-      className={cn(
-        "h-9 w-9 p-0",
-        !isCollapsed && "w-full justify-start px-3"
-      )}
-      asChild
-    >
-      <Link href="/settings" className="flex items-center gap-2">
-        <Settings className="h-4 w-4" />
-        {!isCollapsed && <span>Settings</span>}
-      </Link>
-    </Button>
-  );
-
-  const LoginButton = ({ isCollapsed }) => (
-    <Button
-      variant="ghost"
-      className={cn(
-        "h-9 w-9 p-0 mt-2",
-        !isCollapsed && "w-full justify-start px-3"
-      )}
-      asChild
-    >
-      <Link href="/login" className="flex items-center gap-2">
-        <LogIn className="h-4 w-4" />
-        {!isCollapsed && <span>Login</span>}
-      </Link>
-    </Button>
-  );
-
   return (
-    <div
-      className={cn(
-        "relative flex h-screen border-r bg-background transition-all duration-300",
-        isCollapsed ? "w-20" : "w-52"
-      )}
-    >
+    <div className={cn(
+      "relative flex h-screen border-r bg-background transition-all duration-300",
+      isCollapsed ? "w-20" : "w-64"
+    )}>
       <div className="flex w-full flex-col">
         <div className="p-6">
           <div className="flex items-center gap-2">
@@ -116,45 +88,59 @@ export function Sidebar() {
             {!isCollapsed && <span className="font-bold">PaperParsley</span>}
           </div>
         </div>
-        <Separator />
-        <ScrollArea className="flex-1 px-3">
+        <div className="flex-1 overflow-y-auto px-3">
           <div className="space-y-1 py-4">
-            {memoizedSidebarNavItems.map((item) => (
-              <Button
+            {sidebarNavItems.map((item) => (
+              <Link
                 key={item.href}
-                variant={pathname === item.href ? "secondary" : "ghost"}
+                href={item.href}
                 className={cn(
-                  "w-full justify-start gap-2",
-                  pathname === item.href && "bg-secondary",
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+                  pathname === item.href 
+                    ? "bg-secondary text-secondary-foreground" 
+                    : "hover:bg-accent hover:text-accent-foreground",
                   isCollapsed && "justify-center px-2"
                 )}
-                asChild
               >
-                <Link href={item.href}>
-                  <item.icon className="h-4 w-4" />
-                  {!isCollapsed && item.title}
-                </Link>
-              </Button>
+                <item.icon className="h-4 w-4" />
+                {!isCollapsed && <span>{item.title}</span>}
+              </Link>
             ))}
           </div>
-        </ScrollArea>
-        <div className="p-4 mt-auto border-t">
-          <SettingsButton isCollapsed={isCollapsed} />
-          <LoginButton isCollapsed={isCollapsed} />
+        </div>
+        <div className="mt-auto border-t p-4">
+          <Link
+            href="/settings"
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
+              isCollapsed && "justify-center px-2"
+            )}
+          >
+            <Settings className="h-4 w-4" />
+            {!isCollapsed && <span>Settings</span>}
+          </Link>
+          <Link
+            href="/login"
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
+              isCollapsed && "justify-center px-2"
+            )}
+          >
+            <LogIn className="h-4 w-4" />
+            {!isCollapsed && <span>Login</span>}
+          </Link>
         </div>
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute -right-4 top-6 z-10 h-8 w-8 rounded-full border bg-background"
-        onClick={toggleCollapse}
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="absolute -right-4 top-6 z-10 flex h-8 w-8 items-center justify-center rounded-full border bg-background"
       >
         {isCollapsed ? (
           <ChevronRight className="h-4 w-4" />
         ) : (
           <ChevronLeft className="h-4 w-4" />
         )}
-      </Button>
+      </button>
     </div>
   );
 }
