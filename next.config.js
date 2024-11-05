@@ -7,4 +7,4 @@ const nextConfig = {
   images: { unoptimized: true },
 };
 
-module.exports = nextConfig;s
+module.exports = nextConfig;
