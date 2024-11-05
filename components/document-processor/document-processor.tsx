@@ -264,17 +264,19 @@ export function DocumentProcessor() {
   }, [filteredFiles, selectedFile])
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col gap-8 p-8">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Document Processing</h1>
-          <p className="text-muted-foreground">Process documents from local storage or cloud providers</p>
+          <h1 className="text-3xl font-bold tracking-tight">Document Processing</h1>
+          <p className="text-muted-foreground">
+            Process documents from local storage or cloud providers
+          </p>
         </div>
         <Sheet>
           <SheetTrigger asChild>
-            <Button size="lg">
-              <Upload className="w-4 h-4 mr-2" />
-              Documents
+            <Button>
+              <Upload className="mr-2 h-4 w-4" />
+              New Document
             </Button>
           </SheetTrigger>
           <SheetContent className="w-[400px] sm:w-[540px]">
@@ -391,68 +393,49 @@ export function DocumentProcessor() {
         </Sheet>
       </div>
 
-      <div className="border-b flex">
-        <div className="flex -mb-px space-x-8">
-          <button
-            onClick={() => setActiveTab('all')}
-            className={cn(
-              "pb-4 text-sm font-medium transition-colors relative",
-              activeTab === 'all'
-                ? "text-foreground border-b-2 border-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            All Files
-          </button>
-          <button
-            onClick={() => setActiveTab('queued')}
-            className={cn(
-              "pb-4 text-sm font-medium transition-colors relative",
-              activeTab === 'queued'
-                ? "text-foreground border-b-2 border-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Queued
-          </button>
-          <button
-            onClick={() => setActiveTab('processing')}
-            className={cn(
-              "pb-4 text-sm font-medium transition-colors relative",
-              activeTab === 'processing'
-                ? "text-foreground border-b-2 border-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Processing
-          </button>
-          <button
-            onClick={() => setActiveTab('completed')}
-            className={cn(
-              "pb-4 text-sm font-medium transition-colors relative",
-              activeTab === 'completed'
-                ? "text-foreground border-b-2 border-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Completed
-          </button>
-          <button
-            onClick={() => setActiveTab('failed')}
-            className={cn(
-              "pb-4 text-sm font-medium transition-colors relative",
-              activeTab === 'failed'
-                ? "text-foreground border-b-2 border-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Failed
-          </button>
-        </div>
+      <div className="flex space-x-2">
+        <Button
+          variant={activeTab === 'all' ? "secondary" : "ghost"}
+          onClick={() => setActiveTab('all')}
+          className="min-w-[120px] justify-center"
+        >
+          All Documents
+        </Button>
+        <Button
+          variant={activeTab === 'queued' ? "secondary" : "ghost"}
+          onClick={() => setActiveTab('queued')}
+          className="min-w-[120px] justify-center"
+        >
+          Queued
+        </Button>
+        <Button
+          variant={activeTab === 'processing' ? "secondary" : "ghost"}
+          onClick={() => setActiveTab('processing')}
+          className="min-w-[120px] justify-center"
+        >
+          Processing
+        </Button>
+        <Button
+          variant={activeTab === 'completed' ? "secondary" : "ghost"}
+          onClick={() => setActiveTab('completed')}
+          className="min-w-[120px] justify-center"
+        >
+          Completed
+        </Button>
+        <Button
+          variant={activeTab === 'failed' ? "secondary" : "ghost"}
+          onClick={() => setActiveTab('failed')}
+          className="min-w-[120px] justify-center"
+        >
+          Failed
+        </Button>
       </div>
 
       <div className="relative flex gap-6">
-        <Card className={cn("flex-grow transition-all duration-300", showFileResults ? "w-1/2" : "w-full")}>
+        <Card className={cn(
+          "flex-grow transition-all duration-150 ease-out", 
+          showFileResults ? "w-1/2" : "w-full"
+        )}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between py-4">
               <Input
@@ -536,7 +519,7 @@ export function DocumentProcessor() {
         </Card>
 
         {showFileResults && (
-          <Card className="w-1/2 transition-all duration-300">
+          <Card className="w-1/2 transition-all duration-150 ease-out">
             <CardContent className="p-6">
               {selectedFile ? (
                 <>
@@ -545,42 +528,28 @@ export function DocumentProcessor() {
                       <FileText className="w-4 h-4" />
                       <h3 className="font-semibold">{selectedFile.name}</h3>
                     </div>
-                    <div className="border-b flex">
-                      <div className="flex -mb-px space-x-8">
-                        <button
-                          onClick={() => setViewMode('original')}
-                          className={cn(
-                            "pb-4 text-sm font-medium transition-colors relative",
-                            viewMode === 'original'
-                              ? "text-foreground border-b-2 border-foreground"
-                              : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          Original
-                        </button>
-                        <button
-                          onClick={() => setViewMode('markdown')}
-                          className={cn(
-                            "pb-4 text-sm font-medium transition-colors relative",
-                            viewMode === 'markdown'
-                              ? "text-foreground border-b-2 border-foreground"
-                              : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          Markdown
-                        </button>
-                        <button
-                          onClick={() => setViewMode('structured')}
-                          className={cn(
-                            "pb-4 text-sm font-medium transition-colors relative",
-                            viewMode === 'structured'
-                              ? "text-foreground border-b-2 border-foreground"
-                              : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          Structured
-                        </button>
-                      </div>
+                    <div className="flex space-x-2">
+                      <Button
+                        variant={viewMode === 'original' ? "secondary" : "ghost"}
+                        onClick={() => setViewMode('original')}
+                        className="min-w-[120px] justify-center"
+                      >
+                        Original
+                      </Button>
+                      <Button
+                        variant={viewMode === 'markdown' ? "secondary" : "ghost"}
+                        onClick={() => setViewMode('markdown')}
+                        className="min-w-[120px] justify-center"
+                      >
+                        Markdown
+                      </Button>
+                      <Button
+                        variant={viewMode === 'structured' ? "secondary" : "ghost"}
+                        onClick={() => setViewMode('structured')}
+                        className="min-w-[120px] justify-center"
+                      >
+                        Structured
+                      </Button>
                     </div>
                   </div>
                   <ScrollArea className="h-[600px] border rounded-lg p-4">
@@ -618,7 +587,7 @@ export function DocumentProcessor() {
           onClick={() => setShowFileResults(!showFileResults)}
           className={cn(
             "absolute h-8 w-8 rounded-full border bg-background z-50",
-            "top-1/2 -translate-y-1/2",
+            "top-1/2 -translate-y-1/2 transition-all duration-150 ease-out",
             showFileResults 
               ? "left-[calc(50%-1rem)]" 
               : "-right-4"

@@ -1,7 +1,12 @@
 "use client";
 
-import { DocumentProcessor } from "@/components/document-processor";
+import { DashboardShell } from "@/components/shell";
+import { DocumentProcessor } from "@/components/document-processor/document-processor";
 
-export default function DocProcessingTestPage() {
-  return <DocumentProcessor />;
+export default function ProcessingPage() {
+  return (
+    <DashboardShell>
+      <DocumentProcessor />
+    </DashboardShell>
+  );
 }
