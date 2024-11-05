@@ -3,13 +3,10 @@
 import { useState, memo } from "react";
 import { DashboardShell } from "@/components/shell";
 import { HistoryList } from "@/components/history/history-list";
-import { HistoryFilters } from "@/components/history/history-filters";
+import { Button } from "@/components/ui/button";
 
 export default function HistoryPage() {
   const [filter, setFilter] = useState("all");
-
-  const MemoizedHistoryFilters = memo(HistoryFilters);
-  const MemoizedHistoryList = memo(HistoryList);
 
   return (
     <DashboardShell>
@@ -20,12 +17,25 @@ export default function HistoryPage() {
             <p className="text-muted-foreground">View and manage processed documents</p>
           </div>
           <div className="absolute right-0 top-0">
-            {/* Add your action buttons or components here */}
-            {/* Example: <Button>Upload</Button> */}
+            {/* Add action buttons if needed */}
           </div>
         </div>
-        
-        <MemoizedHistoryList filter={filter} />
+
+        <div className="flex space-x-2">
+          {(['all', 'queued', 'processing', 'completed', 'failed'] as const).map(status => (
+            <Button
+              key={status}
+              variant={filter === status ? "secondary" : "ghost"}
+              onClick={() => setFilter(status)}
+              className="min-w-[120px] justify-center"
+            >
+              {status === 'all' ? 'All Documents' : 
+               status.charAt(0).toUpperCase() + status.slice(1)}
+            </Button>
+          ))}
+        </div>
+
+        <HistoryList filter={filter} />
       </div>
     </DashboardShell>
   );

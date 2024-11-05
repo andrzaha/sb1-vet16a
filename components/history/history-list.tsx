@@ -49,6 +49,7 @@ import { getStatusIcon } from "@/components/document-processor/status-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProcessingFile } from "@/components/document-processor/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { FloatingActionPill } from "@/components/floating-action-pill";
 
 interface HistoryListProps {
   filter: string;
@@ -331,14 +332,14 @@ export function HistoryList({ filter }: HistoryListProps) {
   ];
 
   const filteredDocs = useMemo(() => {
-    let result = documents;
+    let result = [...documents];
     
-    // Filter by status
+    // Apply status filter
     if (filter !== "all") {
       result = result.filter(doc => doc.status === filter);
     }
     
-    // Filter by search term
+    // Apply search filter
     if (searchTerm) {
       result = result.filter(doc => 
         doc.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -347,6 +348,10 @@ export function HistoryList({ filter }: HistoryListProps) {
     
     return result;
   }, [filter, searchTerm]);
+
+  const totalPages = Math.ceil(filteredDocs.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedDocs = filteredDocs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const table = useReactTable({
     data: filteredDocs,
@@ -359,15 +364,22 @@ export function HistoryList({ filter }: HistoryListProps) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    pageCount: Math.ceil(filteredDocs.length / ITEMS_PER_PAGE),
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination: {
+        pageIndex: currentPage - 1,
+        pageSize: ITEMS_PER_PAGE,
+      },
     },
   });
 
-  const totalPages = Math.ceil(filteredDocs.length / ITEMS_PER_PAGE);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
 
   const handleReprocess = (docId: string) => {
     logger.info("Reprocessing document:", docId);
@@ -377,22 +389,35 @@ export function HistoryList({ filter }: HistoryListProps) {
     logger.info("Deleting document:", docId);
   };
 
-  return (
-    <div className="flex flex-col gap-8">
-      <div className="flex space-x-2">
-        {(['all', 'queued', 'processing', 'completed', 'failed'] as const).map(status => (
-          <Button
-            key={status}
-            variant={filter === status ? "secondary" : "ghost"}
-            onClick={() => setActiveTab(status)}
-            className="min-w-[120px] justify-center"
-          >
-            {status === 'all' ? 'All Documents' : 
-             status.charAt(0).toUpperCase() + status.slice(1)}
-          </Button>
-        ))}
-      </div>
+  const handlePreviousPage = () => {
+    table.previousPage();
+    setCurrentPage(prev => Math.max(1, prev - 1));
+  };
 
+  const handleNextPage = () => {
+    table.nextPage();
+    setCurrentPage(prev => Math.min(totalPages, prev + 1));
+  };
+
+  const selectedItems = Object.keys(table.getState().rowSelection);
+  const selectedCount = selectedItems.length;
+
+  const handleBulkReprocess = () => {
+    const selectedDocs = selectedItems.map(index => 
+      filteredDocs[parseInt(index)].id
+    );
+    logger.info("Reprocessing documents:", selectedDocs);
+  };
+
+  const handleBulkDelete = () => {
+    const selectedDocs = selectedItems.map(index => 
+      filteredDocs[parseInt(index)].id
+    );
+    logger.info("Deleting documents:", selectedDocs);
+  };
+
+  return (
+    <>
       <div className="relative flex gap-6">
         <Card className="flex-grow">
           <CardContent className="p-6">
@@ -454,14 +479,19 @@ export function HistoryList({ filter }: HistoryListProps) {
 
             <div className="flex items-center justify-between py-4">
               <div className="text-sm text-muted-foreground">
-                Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, filteredDocs.length)} of {filteredDocs.length} entries
+                Showing {table.getState().pagination.pageIndex * ITEMS_PER_PAGE + 1} to{" "}
+                {Math.min(
+                  (table.getState().pagination.pageIndex + 1) * ITEMS_PER_PAGE,
+                  filteredDocs.length
+                )}{" "}
+                of {filteredDocs.length} entries
               </div>
               <div className="flex items-center space-x-2">
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1}
+                  onClick={handlePreviousPage}
+                  disabled={!table.getCanPreviousPage()}
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
@@ -471,8 +501,8 @@ export function HistoryList({ filter }: HistoryListProps) {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages}
+                  onClick={handleNextPage}
+                  disabled={!table.getCanNextPage()}
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -496,6 +526,23 @@ export function HistoryList({ filter }: HistoryListProps) {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+
+      <FloatingActionPill
+        selectedCount={selectedCount}
+        actions={[
+          {
+            icon: <RotateCw className="h-4 w-4" />,
+            label: "Reprocess",
+            onClick: handleBulkReprocess,
+          },
+          {
+            icon: <Trash2 className="h-4 w-4" />,
+            label: "Delete",
+            onClick: handleBulkDelete,
+            variant: "destructive",
+          },
+        ]}
+      />
+    </>
   );
 }
