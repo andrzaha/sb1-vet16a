@@ -6,10 +6,21 @@ export function DashboardShell({
   ...props
 }: DashboardShellProps) {
   return (
-    <div className="container flex-1 overflow-auto">
-      <div className="grid items-start gap-8 pb-8 pt-6">
-        {children}
-      </div>
+    <div className="flex h-screen bg-background">
+      <SideMenu />
+      <main className="flex-1 overflow-y-auto">
+        <div className="h-full">
+          {children}
+        </div>
+      </main>
     </div>
+  );
+}
+
+export function SideMenu() {
+  return (
+    <aside className="w-0 bg-background border-r">
+      {/* Side menu content */}
+    </aside>
   );
 }
