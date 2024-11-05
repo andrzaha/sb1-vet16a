@@ -48,6 +48,7 @@ import { FilePreview } from "@/components/document-processor/file-preview";
 import { getStatusIcon } from "@/components/document-processor/status-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProcessingFile } from "@/components/document-processor/types";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 interface HistoryListProps {
   filter: string;
@@ -185,7 +186,7 @@ export function HistoryList({ filter }: HistoryListProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFile, setSelectedFile] = useState<ProcessingFile | null>(null);
-  const [showFileResults, setShowFileResults] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const columns: ColumnDef<Document>[] = [
@@ -233,7 +234,7 @@ export function HistoryList({ filter }: HistoryListProps) {
               runtime: row.original.runtime
             };
             setSelectedFile(processingFile);
-            setShowFileResults(true);
+            setIsPreviewOpen(true);
           }}
           className="flex items-center gap-2 hover:text-primary transition-colors"
         >
@@ -396,7 +397,7 @@ export function HistoryList({ filter }: HistoryListProps) {
       <div className="relative flex gap-6">
         <Card className={cn(
           "flex-grow transition-all duration-150 ease-out", 
-          showFileResults ? "w-1/2" : "w-full"
+          isPreviewOpen ? "w-1/2" : "w-full"
         )}>
           <CardContent className="p-6">
             <Table>
@@ -442,11 +443,20 @@ export function HistoryList({ filter }: HistoryListProps) {
           </CardContent>
         </Card>
 
-        <FilePreview 
-          file={selectedFile}
-          showFileResults={showFileResults}
-          onToggleFileResults={() => setShowFileResults(!showFileResults)}
-        />
+        <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle>
+                {selectedFile?.name || 'Document Preview'}
+              </DialogTitle>
+            </DialogHeader>
+            <FilePreview 
+              file={selectedFile}
+              showFileResults={true}
+              isDialog={true}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="flex items-center justify-between">
