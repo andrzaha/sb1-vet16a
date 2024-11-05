@@ -379,27 +379,27 @@ export function HistoryList({ filter }: HistoryListProps) {
 
   return (
     <div className="container mx-auto p-6 space-y-8">
-      <div className="flex items-center space-x-2 mb-4">
-        <div className="relative flex-grow">
-          <Input 
-            placeholder="Search by file name"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="pl-10"
-          />
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-        </div>
-      </div>
-      
       <div className="relative flex gap-6">
         <Card className={cn(
           "flex-grow transition-all duration-150 ease-out", 
           isPreviewOpen ? "w-1/2" : "w-full"
         )}>
           <CardContent className="p-6">
+            <div className="flex items-center justify-between py-4">
+              <div className="relative flex-grow max-w-sm">
+                <Input 
+                  placeholder="Search by file name"
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="pl-10"
+                />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
+              </div>
+            </div>
+
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup: HeaderGroup<Document>) => (
