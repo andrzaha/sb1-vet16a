@@ -13,6 +13,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
 import { FloatingActionPill } from '@/components/shared/floating-action-pill'
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { ProcessingFile, FileSource, schemas } from './types'
 import { FileTable } from './file-table'
@@ -43,21 +45,28 @@ export function DocumentProcessor() {
   const selectedCount = Object.values(selectedRows).filter(Boolean).length
 
   // Define actions for selected files
+  const [loading, setLoading] = useState(false)
   const actions = [
     {
       icon: <Play className="w-4 h-4" />,
       label: "Process",
-      onClick: () => {
-        // Handle processing selected files
-        console.log("Processing selected files")
+      onClick: async () => {
+        setLoading(true)
+        try {
+          console.log("Processing selected files")
+          await new Promise(resolve => setTimeout(resolve, 2000))
+        } catch (error) {
+          console.error("Error processing files:", error)
+        } finally {
+          setLoading(false)
+        }
       },
-      disabled: false,
+      disabled: loading,
     },
     {
       icon: <Settings className="w-4 h-4" />,
       label: "Settings",
       onClick: () => {
-        // Handle settings for selected files
         console.log("Opening settings for selected files")
       },
       disabled: false,
@@ -66,7 +75,6 @@ export function DocumentProcessor() {
       icon: <Trash2 className="w-4 h-4" />,
       label: "Delete",
       onClick: () => {
-        // Handle deleting selected files
         console.log("Deleting selected files")
       },
       variant: "destructive" as const,
@@ -211,7 +219,7 @@ export function DocumentProcessor() {
                   </div>
                 </div>
               </div>
-              <Button>Save</Button>
+              <Button disabled={loading}>Save</Button>
             </div>
           </SheetContent>
         </Sheet>
@@ -231,27 +239,40 @@ export function DocumentProcessor() {
         ))}
       </div>
 
-      <div className="relative flex gap-6">
-        <div className={cn(
-          "flex-grow transition-all duration-150 ease-out",
-          showFileResults ? "w-1/2" : "w-full"
-        )}>
-          <FileTable 
-            files={filteredFiles} 
-            onFileSelect={(file) => {
-              setSelectedFile(file)
-              setShowFileResults(true)
-            }}
-            onRowSelectionChange={setSelectedRows}
-          />
-        </div>
-
-        <FilePreview 
-          file={selectedFile}
-          showFileResults={showFileResults}
-          onToggleFileResults={() => setShowFileResults(!showFileResults)}
-        />
-      </div>
+      <ResizablePanelGroup 
+        direction="horizontal" 
+        className="min-h-[600px] rounded-lg border"
+      >
+        <ResizablePanel defaultSize={60}>
+          <div className="p-4 h-full">
+            <FileTable 
+              files={filteredFiles} 
+              onFileSelect={(file) => {
+                setSelectedFile(file)
+                setShowFileResults(true)
+              }}
+              onRowSelectionChange={setSelectedRows}
+            />
+          </div>
+        </ResizablePanel>
+        
+        {showFileResults && (
+          <>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={40}>
+              <ScrollArea className="h-full">
+                <div className="p-4">
+                  <FilePreview 
+                    file={selectedFile}
+                    showFileResults={showFileResults}
+                    onToggleFileResults={() => setShowFileResults(!showFileResults)}
+                  />
+                </div>
+              </ScrollArea>
+            </ResizablePanel>
+          </>
+        )}
+      </ResizablePanelGroup>
 
       <FloatingActionPill
         selectedCount={selectedCount}

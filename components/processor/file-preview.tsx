@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { FileText, ChevronRight } from 'lucide-react'
+import { FileText, ChevronRight, X, Download, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Separator } from '@/components/ui/separator'
 import { cn } from "@/lib/utils"
 
 import { ProcessingFile, ViewMode } from './types'
@@ -25,36 +26,24 @@ export function FilePreview({
   const [viewMode, setViewMode] = useState<ViewMode>('original')
 
   const content = (
-    <>
-      <div className="flex justify-between items-center mb-4">
+    <div className="h-full flex flex-col">
+      <div className="flex justify-between items-center py-2 px-4 border-b">
         <div className="flex items-center gap-2">
-          <FileText className="w-4 h-4" />
-          <h3 className="font-semibold">{file?.name || 'No File Selected'}</h3>
+          <FileText className="w-4 h-4 text-muted-foreground" />
+          <h3 className="font-medium truncate max-w-[200px]">
+            {file?.name || 'No File Selected'}
+          </h3>
         </div>
         <div className="flex items-center gap-2">
           {file && (
             <>
-              <Button
-                variant={viewMode === 'original' ? "secondary" : "ghost"}
-                onClick={() => setViewMode('original')}
-                className="min-w-[100px] justify-center"
-              >
-                Original
+              <Button variant="ghost" size="icon">
+                <Download className="h-4 w-4" />
               </Button>
-              <Button
-                variant={viewMode === 'markdown' ? "secondary" : "ghost"}
-                onClick={() => setViewMode('markdown')}
-                className="min-w-[100px] justify-center"
-              >
-                Markdown
+              <Button variant="ghost" size="icon">
+                <Share2 className="h-4 w-4" />
               </Button>
-              <Button
-                variant={viewMode === 'structured' ? "secondary" : "ghost"}
-                onClick={() => setViewMode('structured')}
-                className="min-w-[100px] justify-center"
-              >
-                Structured
-              </Button>
+              <Separator orientation="vertical" className="h-6" />
             </>
           )}
           {!isDialog && (
@@ -62,32 +51,62 @@ export function FilePreview({
               variant="ghost"
               size="icon"
               onClick={onToggleFileResults}
-              className="ml-2"
             >
-              <ChevronRight className="h-4 w-4" />
+              <X className="h-4 w-4" />
             </Button>
           )}
         </div>
       </div>
-      <ScrollArea className="h-[600px] border rounded-lg p-4">
-        {file ? (
+
+      <div className="flex items-center gap-2 p-4 bg-muted/50">
+        {file && (
           <>
+            <Button
+              variant={viewMode === 'original' ? "secondary" : "ghost"}
+              onClick={() => setViewMode('original')}
+              size="sm"
+            >
+              Original
+            </Button>
+            <Button
+              variant={viewMode === 'markdown' ? "secondary" : "ghost"}
+              onClick={() => setViewMode('markdown')}
+              size="sm"
+            >
+              Markdown
+            </Button>
+            <Button
+              variant={viewMode === 'structured' ? "secondary" : "ghost"}
+              onClick={() => setViewMode('structured')}
+              size="sm"
+            >
+              Structured
+            </Button>
+          </>
+        )}
+      </div>
+
+      <ScrollArea className="flex-1 p-4">
+        {file ? (
+          <div className="space-y-4">
             {viewMode === 'original' && (
               <div className="aspect-[3/4] bg-muted rounded-lg flex items-center justify-center">
                 <FileText className="w-12 h-12 text-muted-foreground" />
               </div>
             )}
             {viewMode === 'markdown' && (
-              <div className="prose prose-sm max-w-none">
+              <div className="prose prose-sm max-w-none dark:prose-invert">
                 {file?.output?.markdown || 'No markdown preview available'}
               </div>
             )}
             {viewMode === 'structured' && (
-              <pre className="text-sm">
-                {JSON.stringify(file?.output?.structured || {}, null, 2)}
+              <pre className="bg-muted p-4 rounded-lg overflow-auto">
+                <code className="text-sm">
+                  {JSON.stringify(file?.output?.structured || {}, null, 2)}
+                </code>
               </pre>
             )}
-          </>
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <FileText className="w-12 h-12 text-muted-foreground mb-4" />
@@ -96,21 +115,12 @@ export function FilePreview({
           </div>
         )}
       </ScrollArea>
-    </>
+    </div>
   );
 
   if (isDialog) {
     return content;
   }
 
-  return (
-    <Card className={cn(
-      "w-1/2 transition-all duration-150 ease-out",
-      !showFileResults && "hidden"
-    )}>
-      <CardContent className="p-6">
-        {content}
-      </CardContent>
-    </Card>
-  );
+  return content;
 }
