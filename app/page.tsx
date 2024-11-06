@@ -1,25 +1,24 @@
 "use client";
 
-import { DashboardShell } from '@/components/shell';
-import { ProcessingStats } from '@/components/processing-stats';  
+import { DashboardCards } from "@/components/dashboard/dashboard-cards";
 
-export default function Home() {
-  const userName = "John Doe"; // Example user name
+const metrics = {
+  totalProcessed: 1234,
+  failedJobs: 23,
+  averageProcessingTime: 3.5,
+  successRate: 98.5,
+  activeSchedules: 15,
+  failedSchedules: 2
+};
 
+export default function DashboardPage() {
   return (
-    <DashboardShell>
-      <div className="container mx-auto p-6 space-y-8 max-w-full">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Welcome, {userName}!</h1>
-          <p className="text-muted-foreground">
-            Upload, process, and manage your documents with intelligent parsing and schema detection.
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <ProcessingStats />
-        </div>
+    <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
       </div>
-    </DashboardShell>
+      <DashboardCards metrics={metrics} />
+      {/* Add other dashboard components here */}
+    </div>
   );
 }

@@ -8,9 +8,9 @@ import {
   ArrowUpDown 
 } from "lucide-react";
 import { toast } from "sonner";
-import { FloatingActionPill } from "@/components/floating-action-pill";
+import { FloatingActionPill } from "@/components/shared/floating-action-pill";
 import { SchedulerFilters } from "@/components/sheduler/scheduler-filters";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ColumnDef } from "@tanstack/react-table";
@@ -226,108 +226,113 @@ export function ScheduledJobs() {
         actions={pillActions}
       />
 
-      <Sheet open={showJobStats} onOpenChange={setShowJobStats}>
-        <SheetContent className="sm:max-w-xl">
-          <SheetHeader>
-            <SheetTitle>{selectedJob?.name}</SheetTitle>
-          </SheetHeader>
-          <div className="mt-6 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Job Overview</CardTitle>
-              </CardHeader>
-              <CardContent className="grid gap-4">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Schedule:</span>
-                  <span className="font-mono">{selectedJob?.schedule}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Status:</span>
-                  <div className="flex items-center gap-2">
-                    {selectedJob?.status === "running" && (
-                      <>
-                        <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-green-500">Running</span>
-                      </>
-                    )}
-                    {selectedJob?.status === "paused" && (
-                      <>
-                        <div className="h-2 w-2 bg-gray-500 rounded-full" />
-                        <span className="text-gray-500">Paused</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Last Run:</span>
-                  <span>{selectedJob?.lastRun}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Next Run:</span>
-                  <span>{selectedJob?.nextRun}</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Processing Statistics</CardTitle>
-              </CardHeader>
-              <CardContent className="grid gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <p className="text-sm text-muted-foreground">Success Rate</p>
-                    <p className="text-2xl">85%</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm text-muted-foreground">Avg. Duration</p>
-                    <p className="text-2xl">5m</p>
-                  </div>
-                </div>
-                <div className="space-y-2">
+      <Drawer open={showJobStats} onOpenChange={setShowJobStats}>
+        <DrawerContent className="max-h-[85vh]">
+          <DrawerHeader className="text-left pb-4">
+            <DrawerTitle>{selectedJob?.name}</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-8">
+            <div className="grid grid-cols-3 gap-4">
+              {/* Job Overview - First Column */}
+              <Card className="col-span-3 md:col-span-1">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Job Overview</CardTitle>
+                </CardHeader>
+                <CardContent className="grid gap-2">
                   <div className="flex justify-between text-sm">
-                    <span>Processing Success</span>
-                    <span>85%</span>
+                    <span className="text-muted-foreground">Schedule:</span>
+                    <span className="font-mono">{selectedJob?.schedule}</span>
                   </div>
-                  <Progress value={85} />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Recent Executions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {executionHistory.map((execution) => (
-                    <div key={execution.id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium">{execution.startTime}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {execution.status === "completed" 
-                            ? `${execution.documentsProcessed} documents processed`
-                            : execution.error}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {execution.status === "completed" ? (
-                          <div className="h-2 w-2 bg-green-500 rounded-full" />
-                        ) : (
-                          <div className="h-2 w-2 bg-red-500 rounded-full" />
-                        )}
-                        <span className={execution.status === "completed" ? "text-green-500" : "text-red-500"}>
-                          {execution.status}
-                        </span>
-                      </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Status:</span>
+                    <div className="flex items-center gap-2">
+                      {selectedJob?.status === "running" && (
+                        <>
+                          <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                          <span className="text-green-500">Running</span>
+                        </>
+                      )}
+                      {selectedJob?.status === "paused" && (
+                        <>
+                          <div className="h-2 w-2 bg-gray-500 rounded-full" />
+                          <span className="text-gray-500">Paused</span>
+                        </>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Last Run:</span>
+                    <span>{selectedJob?.lastRun}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Next Run:</span>
+                    <span>{selectedJob?.nextRun}</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Processing Statistics - Second Column */}
+              <Card className="col-span-3 md:col-span-1">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Processing Statistics</CardTitle>
+                </CardHeader>
+                <CardContent className="grid gap-3">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Success Rate</p>
+                      <p className="text-xl font-medium">85%</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Avg. Duration</p>
+                      <p className="text-xl font-medium">5m</p>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span>Processing Success</span>
+                      <span>85%</span>
+                    </div>
+                    <Progress value={85} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Recent Executions - Third Column */}
+              <Card className="col-span-3 md:col-span-1">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Recent Executions</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-2">
+                    {executionHistory.slice(0, 3).map((execution) => (
+                      <div key={execution.id} className="flex items-center justify-between py-2 border-b last:border-0">
+                        <div>
+                          <p className="text-sm font-medium">{execution.startTime}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {execution.status === "completed" 
+                              ? `${execution.documentsProcessed} documents processed`
+                              : execution.error}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {execution.status === "completed" ? (
+                            <div className="h-2 w-2 bg-green-500 rounded-full" />
+                          ) : (
+                            <div className="h-2 w-2 bg-red-500 rounded-full" />
+                          )}
+                          <span className={`text-sm ${execution.status === "completed" ? "text-green-500" : "text-red-500"}`}>
+                            {execution.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </SheetContent>
-      </Sheet>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

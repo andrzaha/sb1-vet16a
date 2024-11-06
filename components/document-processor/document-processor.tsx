@@ -12,7 +12,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
-import { FloatingActionPill } from '@/components/floating-action-pill'
+import { FloatingActionPill } from '@/components/shared/floating-action-pill'
 
 import { ProcessingFile, FileSource, schemas } from './types'
 import { FileTable } from './file-table'
@@ -86,6 +86,9 @@ export function DocumentProcessor() {
     }
   }, [filteredFiles, selectedFile])
 
+  // Add this with your other state declarations
+  const [showConfig, setShowConfig] = useState(false)
+
   return (
     <div className="container mx-auto p-6 space-y-8 max-w-full overflow-x-hidden">
       <div className="flex justify-between items-center">
@@ -114,21 +117,19 @@ export function DocumentProcessor() {
       </div>
 
       <div className="relative flex gap-6">
-        <Card className={cn(
-          "flex-grow transition-all duration-150 ease-out", 
+        <div className={cn(
+          "flex-grow transition-all duration-150 ease-out",
           showFileResults ? "w-1/2" : "w-full"
         )}>
-          <CardContent className="p-6">
-            <FileTable 
-              files={filteredFiles} 
-              onFileSelect={(file) => {
-                setSelectedFile(file)
-                setShowFileResults(true)
-              }}
-              onRowSelectionChange={setSelectedRows}
-            />
-          </CardContent>
-        </Card>
+          <FileTable 
+            files={filteredFiles} 
+            onFileSelect={(file) => {
+              setSelectedFile(file)
+              setShowFileResults(true)
+            }}
+            onRowSelectionChange={setSelectedRows}
+          />
+        </div>
 
         <FilePreview 
           file={selectedFile}

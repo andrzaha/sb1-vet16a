@@ -21,7 +21,7 @@ import { getStatusIcon } from "@/components/document-processor/status-utils";
 import { ProcessingFile } from "@/components/document-processor/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { FloatingActionPill } from "@/components/floating-action-pill";
+import { FloatingActionPill } from "@/components/shared/floating-action-pill";
 import { Document, exampleDocuments } from "./example-documents";
 
 interface HistoryListProps {
@@ -187,17 +187,15 @@ export function HistoryList({ filter }: HistoryListProps) {
   return (
     <>
       <div className="relative flex gap-6">
-        <Card className="flex-grow">
-          <CardContent className="p-6">
-            <DataTable 
-              columns={columns} 
-              data={filteredDocs}
-              onRowSelectionChange={handleRowSelectionChange}
-              searchKey="name"
-              searchPlaceholder="Search by file name..."
-            />
-          </CardContent>
-        </Card>
+        <div className="flex-grow">
+          <DataTable 
+            columns={columns} 
+            data={filteredDocs}
+            onRowSelectionChange={handleRowSelectionChange}
+            searchKey="name"
+            searchPlaceholder="Search by file name..."
+          />
+        </div>
 
         <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
           <DialogContent className="max-w-4xl">

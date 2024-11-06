@@ -14,7 +14,7 @@ import {
   Trash2,
   ArrowUpDown
 } from "lucide-react";
-import { FloatingActionPill } from "@/components/floating-action-pill";
+import { FloatingActionPill } from "@/components/shared/floating-action-pill";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/shared/data-table";
 import { TemplateFilters } from "./template-filters";
