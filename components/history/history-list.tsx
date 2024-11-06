@@ -19,10 +19,10 @@ import { DataTable } from "@/components/shared/data-table";
 import { FilePreview } from "@/components/processor/file-preview";
 import { getStatusIcon } from "@/components/processor/status-utils";
 import { ProcessingFile } from "@/components/processor/types";
-import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { FloatingActionPill } from "@/components/shared/floating-action-pill";
 import { Document, exampleDocuments } from "./example-documents";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface HistoryListProps {
   filter: string;
@@ -32,7 +32,7 @@ export function HistoryList({ filter }: HistoryListProps) {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFile, setSelectedFile] = useState<ProcessingFile | null>(null);
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [showFileResults, setShowFileResults] = useState(false);
 
   const columns: ColumnDef<Document>[] = [
     {
@@ -79,7 +79,7 @@ export function HistoryList({ filter }: HistoryListProps) {
               runtime: row.original.runtime
             };
             setSelectedFile(processingFile);
-            setIsPreviewOpen(true);
+            setShowFileResults(true);
           }}
           className="flex items-center gap-2 hover:text-primary transition-colors"
         >
@@ -186,32 +186,39 @@ export function HistoryList({ filter }: HistoryListProps) {
 
   return (
     <>
-      <div className="relative flex gap-6">
-        <div className="flex-grow">
-          <DataTable 
-            columns={columns} 
-            data={filteredDocs}
-            onRowSelectionChange={handleRowSelectionChange}
-            searchKey="name"
-            searchPlaceholder="Search by file name..."
-          />
-        </div>
-
-        <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-          <DialogContent className="max-w-4xl">
-            <DialogHeader>
-              <DialogTitle>
-                {selectedFile?.name || 'Document Preview'}
-              </DialogTitle>
-            </DialogHeader>
-            <FilePreview 
-              file={selectedFile}
-              showFileResults={true}
-              isDialog={true}
+      <ResizablePanelGroup 
+        direction="horizontal" 
+        className="min-h-[600px] rounded-lg border"
+      >
+        <ResizablePanel defaultSize={60}>
+          <div className="p-4 h-full">
+            <DataTable 
+              columns={columns} 
+              data={filteredDocs}
+              onRowSelectionChange={handleRowSelectionChange}
+              searchKey="name"
+              searchPlaceholder="Search by file name..."
             />
-          </DialogContent>
-        </Dialog>
-      </div>
+          </div>
+        </ResizablePanel>
+        
+        {showFileResults && (
+          <>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={40}>
+              <ScrollArea className="h-full">
+                <div className="p-4">
+                  <FilePreview 
+                    file={selectedFile}
+                    showFileResults={showFileResults}
+                    onToggleFileResults={() => setShowFileResults(!showFileResults)}
+                  />
+                </div>
+              </ScrollArea>
+            </ResizablePanel>
+          </>
+        )}
+      </ResizablePanelGroup>
 
       <FloatingActionPill
         selectedCount={selectedDocs.length}
