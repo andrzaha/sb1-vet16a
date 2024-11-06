@@ -8,9 +8,11 @@ import { Separator } from "@/components/ui/separator";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Laptop } from "lucide-react";
 import { toast } from "sonner";
+import { useSettings } from '@/lib/settings';
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
+  const { fontSize, setFontSize } = useSettings();
 
   const handleSave = () => {
     toast.success("Settings saved successfully");
@@ -23,7 +25,7 @@ export function Settings() {
         <div>
           <h3 className="text-xl font-medium">Appearance</h3>
           <p className="text-sm text-muted-foreground">
-            Customize your application theme
+            Customize your application theme and font size
           </p>
         </div>
         <Separator />
@@ -60,6 +62,34 @@ export function Settings() {
                   <Laptop className="h-4 w-4" />
                   System
                 </Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          {/* Font Size Setting */}
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label>Font Size</Label>
+              <p className="text-sm text-muted-foreground">
+                Adjust the text size across the application
+              </p>
+            </div>
+            <RadioGroup 
+              value={fontSize} 
+              onValueChange={(size) => setFontSize(size as 'small' | 'medium' | 'large')}
+              className="flex gap-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="small" id="small" />
+                <Label htmlFor="small">Small</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="medium" id="medium" />
+                <Label htmlFor="medium">Medium</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="large" id="large" />
+                <Label htmlFor="large">Large</Label>
               </div>
             </RadioGroup>
           </div>

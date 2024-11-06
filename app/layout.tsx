@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/sidebar"
 import { cn } from '@/lib/utils';
 import { JetBrains_Mono } from "next/font/google";
 import { Courier_Prime } from 'next/font/google'
+import { SettingsProvider } from '@/lib/settings.tsx';
 
 const inter = Inter({ subsets: ['latin'] });
 const jetbrainsMono = JetBrains_Mono({ 
@@ -37,7 +38,7 @@ export default function RootLayout({
       </head>
       <body className={cn(
         courierPrime.className, 
-        'min-h-screen bg-background antialiased text-xl',
+        'min-h-screen bg-background antialiased',
         jetbrainsMono.variable
       )}>
         <ThemeProvider
@@ -46,13 +47,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen">
-            <AppSidebar />
-            <main className="flex-1 overflow-hidden">
-              {children}
-            </main>
-          </div>
-          <Toaster />
+          <SettingsProvider>
+            <div className="flex min-h-screen">
+              <AppSidebar />
+              <main className="flex-1 overflow-hidden">
+                {children}
+              </main>
+            </div>
+            <Toaster />
+          </SettingsProvider>
         </ThemeProvider>
       </body>
     </html>
