@@ -1,4 +1,4 @@
-import { ProcessingFile } from "@/components/document-processor/types";
+import { ProcessingFile } from "@/components/processor/types";
 
 export interface Document extends ProcessingFile {
   type: string;

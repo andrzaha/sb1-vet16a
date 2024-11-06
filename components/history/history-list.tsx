@@ -16,9 +16,9 @@ import {
 } from "@tanstack/react-table";
 
 import { DataTable } from "@/components/shared/data-table";
-import { FilePreview } from "@/components/document-processor/file-preview";
-import { getStatusIcon } from "@/components/document-processor/status-utils";
-import { ProcessingFile } from "@/components/document-processor/types";
+import { FilePreview } from "@/components/processor/file-preview";
+import { getStatusIcon } from "@/components/processor/status-utils";
+import { ProcessingFile } from "@/components/processor/types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { FloatingActionPill } from "@/components/shared/floating-action-pill";

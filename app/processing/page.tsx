@@ -1,7 +1,7 @@
 "use client";
 
 import { DashboardShell } from "@/components/shell";
-import { DocumentProcessor } from "@/components/document-processor/document-processor";
+import { DocumentProcessor } from "@/components/processor/document-processor";
 
 export default function ProcessingPage() {
   return (
