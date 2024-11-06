@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FileText, ChevronRight, X, Download, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { cn } from "@/lib/utils"
+import Image from 'next/image'
 
 import { ProcessingFile, ViewMode } from './types'
 
@@ -24,6 +25,22 @@ export function FilePreview({
   isDialog 
 }: FilePreviewProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('original')
+  const [sampleMarkdown, setSampleMarkdown] = useState<string>('')
+  const [sampleJson, setSampleJson] = useState<any>(null)
+
+  useEffect(() => {
+    // Load sample markdown
+    fetch('/examples/sample.md')
+      .then(response => response.text())
+      .then(text => setSampleMarkdown(text))
+      .catch(error => console.error('Error loading sample markdown:', error));
+
+    // Load sample JSON
+    fetch('/examples/sample.json')
+      .then(response => response.json())
+      .then(json => setSampleJson(json))
+      .catch(error => console.error('Error loading sample JSON:', error));
+  }, []);
 
   const content = (
     <div className="h-full flex flex-col">
@@ -90,19 +107,29 @@ export function FilePreview({
         {file ? (
           <div className="space-y-4">
             {viewMode === 'original' && (
-              <div className="aspect-[3/4] bg-muted rounded-lg flex items-center justify-center">
-                <FileText className="w-12 h-12 text-muted-foreground" />
+              <div className="relative aspect-[3/4] bg-muted rounded-lg overflow-hidden">
+                <Image
+                  src="/examples/sample-image.jpg"
+                  alt="Document preview"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             )}
             {viewMode === 'markdown' && (
               <div className="prose prose-sm max-w-none dark:prose-invert">
-                {file?.output?.markdown || 'No markdown preview available'}
+                {file?.output?.markdown || sampleMarkdown}
               </div>
             )}
             {viewMode === 'structured' && (
               <pre className="bg-muted p-4 rounded-lg overflow-auto">
                 <code className="text-sm">
-                  {JSON.stringify(file?.output?.structured || {}, null, 2)}
+                  {JSON.stringify(
+                    file?.output?.structured || sampleJson,
+                    null,
+                    2
+                  )}
                 </code>
               </pre>
             )}

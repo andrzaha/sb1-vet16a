@@ -1,0 +1,50 @@
+{
+    "invoice": {
+      "company": {
+        "name": "Liceria Co",
+        "contact": {
+          "phone": "+123 456 789",
+          "email": "hello@reallygreatsite.com",
+          "address": "123 Anywhere St, Any City, ST 123"
+        },
+        "date": "09-09-2022"
+      },
+      "client": {
+        "to": {
+          "name": "Mr. Benjamin Shah",
+          "position": "CEO",
+          "company": "Warderie"
+        },
+        "project": [
+          "Work Project 1",
+          "Work Project 2"
+        ]
+      },
+      "items": [
+        {
+          "qty": 1,
+          "description": "Work 1",
+          "price": 1000
+        },
+        {
+          "qty": 2,
+          "description": "Work 2",
+          "price": 700
+        },
+        {
+          "qty": 3,
+          "description": "Work 3",
+          "price": 500
+        }
+      ],
+      "total": 2200,
+      "payment_terms": {
+        "excludes_tax": true,
+        "conditions": [
+          "The final project will be given after payment is complete.",
+          "Payment can be transferred to payment@reallygreatsite.com."
+        ]
+      }
+    }
+  }
+  
