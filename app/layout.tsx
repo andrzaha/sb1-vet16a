@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/sidebar"
 import { cn } from '@/lib/utils';
 import { JetBrains_Mono } from "next/font/google";
 import { Courier_Prime } from 'next/font/google'
-import { SettingsProvider } from '@/lib/settings.tsx';
+import { SettingsProvider } from '@/lib/settings';
 
 const inter = Inter({ subsets: ['latin'] });
 const jetbrainsMono = JetBrains_Mono({ 

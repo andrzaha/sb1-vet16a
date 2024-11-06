@@ -10,7 +10,7 @@ interface SettingsContextType {
   setFontSize: (size: FontSize) => void;
 }
 
-export const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
+const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [fontSize, setFontSize] = useState<FontSize>('medium');
