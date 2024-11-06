@@ -8,6 +8,9 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { cn } from "@/lib/utils"
 import Image from 'next/image'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import type { Components } from 'react-markdown'
 
 import { ProcessingFile, ViewMode } from './types'
 
@@ -16,6 +19,15 @@ interface FilePreviewProps {
   showFileResults: boolean
   onToggleFileResults?: () => void
   isDialog?: boolean
+}
+
+interface MarkdownComponentProps {
+  children?: React.ReactNode
+  className?: string
+}
+
+interface CodeComponentProps extends MarkdownComponentProps {
+  inline?: boolean
 }
 
 export function FilePreview({ 
@@ -41,6 +53,43 @@ export function FilePreview({
       .then(json => setSampleJson(json))
       .catch(error => console.error('Error loading sample JSON:', error));
   }, []);
+
+  const markdownComponents: Components = {
+    h1: ({children}: MarkdownComponentProps) => (
+      <h1 className="text-2xl font-bold mb-4">{children}</h1>
+    ),
+    h2: ({children}: MarkdownComponentProps) => (
+      <h2 className="text-xl font-bold mb-3">{children}</h2>
+    ),
+    h3: ({children}: MarkdownComponentProps) => (
+      <h3 className="text-lg font-bold mb-2">{children}</h3>
+    ),
+    p: ({children}: MarkdownComponentProps) => (
+      <p className="mb-4">{children}</p>
+    ),
+    ul: ({children}: MarkdownComponentProps) => (
+      <ul className="list-disc pl-6 mb-4">{children}</ul>
+    ),
+    ol: ({children}: MarkdownComponentProps) => (
+      <ol className="list-decimal pl-6 mb-4">{children}</ol>
+    ),
+    li: ({children}: MarkdownComponentProps) => (
+      <li className="mb-1">{children}</li>
+    ),
+    blockquote: ({children}: MarkdownComponentProps) => (
+      <blockquote className="border-l-4 border-gray-300 pl-4 italic my-4">{children}</blockquote>
+    ),
+    code: ({inline, className, children}: CodeComponentProps) => {
+      const match = /language-(\w+)/.exec(className || '')
+      return !inline ? (
+        <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 overflow-x-auto my-4">
+          <code className={className}>{children}</code>
+        </pre>
+      ) : (
+        <code className="bg-gray-100 dark:bg-gray-800 rounded px-1">{children}</code>
+      )
+    }
+  }
 
   const content = (
     <div className="h-full flex flex-col">
@@ -118,9 +167,14 @@ export function FilePreview({
               </div>
             )}
             {viewMode === 'markdown' && (
-              <div className="prose prose-sm max-w-none dark:prose-invert">
-                {file?.output?.markdown || sampleMarkdown}
-              </div>
+              <article className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-a:text-blue-600 hover:prose-a:text-blue-500">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={markdownComponents}
+                >
+                  {file?.output?.markdown || sampleMarkdown}
+                </ReactMarkdown>
+              </article>
             )}
             {viewMode === 'structured' && (
               <pre className="bg-muted p-4 rounded-lg overflow-auto">
