@@ -75,6 +75,14 @@
     --line-height-small: 1.4;
     --line-height-medium: 1.5;
     --line-height-large: 1.6;
+
+    --switch-thumb-color: hsl(0 0% 100%);        /* White thumb */
+    --switch-track-color: hsl(0 0% 85%);         /* Light grey track */
+    --switch-track-checked: hsl(0 0% 40%);       /* Darker grey when checked */
+    
+    --switch-thumb-color-dark: hsl(0 0% 100%);   /* White thumb */
+    --switch-track-color-dark: hsl(220 20% 30%); /* Dark grey track */
+    --switch-track-checked-dark: hsl(220 20% 45%); /* Lighter grey when checked */
   }
   .dark {
     --background: 220 20% 10%;
@@ -201,40 +209,6 @@
     h3 { font-size: 1.75rem; }
     h4 { font-size: 1.5rem; }
   }
-
-  /* Improve radio button visibility */
-  .radio-group-item {
-    background-color: var(--background) !important;
-    border: 2px solid var(--primary) !important;
-  }
-
-  .radio-group-item[data-state="checked"] {
-    background-color: var(--primary) !important;
-    border-color: var(--primary) !important;
-  }
-
-  /* Improve switch visibility */
-  .switch-root {
-    background-color: var(--muted) !important;
-    border: 2px solid var(--primary) !important;
-  }
-
-  .switch-root[data-state="checked"] {
-    background-color: var(--primary) !important;
-  }
-
-  .switch-thumb {
-    background-color: var(--background) !important;
-    width: 1rem !important;
-    height: 1rem !important;
-  }
-
-  /* Improve label contrast */
-  .radio-group-item + label,
-  .switch-root + label {
-    color: var(--foreground);
-    font-weight: 500;
-  }
 }
 
 @layer base {
@@ -267,4 +241,71 @@
 .fixed.inset-0 > div[role="dialog"],
 div[data-state="open"][role="dialog"] {
   background-color: var(--sheet-background);
+}
+
+/* Add Switch component custom styles */
+.dark [data-state="checked"].switch-thumb {
+  background-color: var(--switch-thumb-color-dark);
+}
+
+.dark [data-state="unchecked"].switch-thumb {
+  background-color: var(--switch-thumb-color-dark);
+}
+
+.dark [role="switch"][data-state="checked"] {
+  background-color: var(--switch-track-checked-dark);
+}
+
+.dark [role="switch"][data-state="unchecked"] {
+  background-color: var(--switch-track-color-dark);
+}
+
+[data-state="checked"].switch-thumb {
+  background-color: var(--switch-thumb-color);
+}
+
+[data-state="unchecked"].switch-thumb {
+  background-color: var(--switch-thumb-color);
+}
+
+[role="switch"][data-state="checked"] {
+  background-color: var(--switch-track-checked);
+}
+
+[role="switch"][data-state="unchecked"] {
+  background-color: var(--switch-track-color);
+}
+
+/* Replace the existing switch styles with these */
+
+/* Light theme switch styles */
+[role="switch"] {
+  transition: background-color 0.2s ease;
+}
+
+[role="switch"][data-state="unchecked"] {
+  background-color: var(--switch-track-color);
+}
+
+[role="switch"][data-state="checked"] {
+  background-color: var(--switch-track-checked);
+}
+
+/* The thumb (circle) of the switch */
+[role="switch"] span {
+  background-color: var(--switch-thumb-color);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Dark theme switch styles */
+.dark [role="switch"][data-state="unchecked"] {
+  background-color: var(--switch-track-color-dark);
+}
+
+.dark [role="switch"][data-state="checked"] {
+  background-color: var(--switch-track-checked-dark);
+}
+
+.dark [role="switch"] span {
+  background-color: var(--switch-thumb-color-dark);
 }

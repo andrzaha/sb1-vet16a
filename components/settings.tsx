@@ -9,10 +9,16 @@ import { useTheme } from "next-themes";
 import { Sun, Moon, Laptop } from "lucide-react";
 import { toast } from "sonner";
 import { useSettings } from '@/lib/settings';
+import { useState } from "react";
 
 export function Settings() {
   const { theme, setTheme } = useTheme();
   const { fontSize, setFontSize } = useSettings();
+
+  const [autoDelete, setAutoDelete] = useState(false);
+  const [notifyProcessing, setNotifyProcessing] = useState(false);
+  const [notifyErrors, setNotifyErrors] = useState(false);
+  const [weeklyReports, setWeeklyReports] = useState(false);
 
   const handleSave = () => {
     toast.success("Settings saved successfully");
@@ -113,7 +119,10 @@ export function Settings() {
                 Automatically remove source files after processing
               </p>
             </div>
-            <Switch />
+            <Switch
+              checked={autoDelete}
+              onCheckedChange={setAutoDelete}
+            />
           </div>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
@@ -150,7 +159,10 @@ export function Settings() {
                 Get notified when document processing is finished
               </p>
             </div>
-            <Switch />
+            <Switch
+              checked={notifyProcessing}
+              onCheckedChange={setNotifyProcessing}
+            />
           </div>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
@@ -159,7 +171,10 @@ export function Settings() {
                 Receive alerts about processing errors
               </p>
             </div>
-            <Switch />
+            <Switch
+              checked={notifyErrors}
+              onCheckedChange={setNotifyErrors}
+            />
           </div>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
@@ -168,7 +183,10 @@ export function Settings() {
                 Get a summary of processed documents every week
               </p>
             </div>
-            <Switch />
+            <Switch
+              checked={weeklyReports}
+              onCheckedChange={setWeeklyReports}
+            />
           </div>
         </div>
       </div>
