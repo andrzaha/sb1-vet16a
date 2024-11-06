@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,88 +12,129 @@ import {
   List,
   Download,
   Trash2,
-  MoreHorizontal
+  ArrowUpDown
 } from "lucide-react";
 import { FloatingActionPill } from "@/components/floating-action-pill";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/shared/data-table";
 import { TemplateFilters } from "./template-filters";
-
-const templates = [
-  {
-    id: "1",
-    name: "Invoice Template",
-    description: "Extract data from invoice documents",
-    fields: ["Invoice Number", "Date", "Amount", "Vendor"],
-    documentCount: 156,
-    lastUsed: "2024-03-20",
-    type: "default",
-  },
-  {
-    id: "2",
-    name: "Contract Template",
-    description: "Process legal contracts and agreements",
-    fields: ["Parties", "Terms", "Effective Date", "Signatures"],
-    documentCount: 89,
-    lastUsed: "2024-03-19",
-    type: "default",
-  },
-  {
-    id: "3",
-    name: "Resume Template",
-    description: "Parse resume and CV documents",
-    fields: ["Name", "Experience", "Education", "Skills"],
-    documentCount: 234,
-    lastUsed: "2024-03-18",
-    type: "default",
-  },
-  // Example user-created template
-  {
-    id: "4",
-    name: "Custom Template",
-    description: "User-defined template for specific needs",
-    fields: ["Custom Field 1", "Custom Field 2"],
-    documentCount: 10,
-    lastUsed: "2024-03-21",
-    type: "user",
-  },
-];
+import { Template, exampleTemplates } from "./example-templates";
 
 type ViewMode = "grid" | "table";
 
 export function SchemaList() {
   const [selectedTemplates, setSelectedTemplates] = useState<string[]>([]);
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
   const [filter, setFilter] = useState("default");
 
-  const filteredTemplates = templates.filter(template => template.type === filter);
+  const columns: ColumnDef<Template>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <span className="font-medium">{row.getValue("name")}</span>
+          {row.original.type === "user" && (
+            <Button variant="ghost" size="icon" className="hover:bg-muted">
+              <Settings className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "description",
+      header: "Description",
+    },
+    {
+      accessorKey: "fields",
+      header: "Fields",
+      cell: ({ row }) => (
+        <div className="flex flex-wrap gap-1">
+          {(row.getValue("fields") as string[]).map((field) => (
+            <Badge key={field} variant="secondary">
+              {field}
+            </Badge>
+          ))}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "documentCount",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Documents
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+    {
+      accessorKey: "lastUsed",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Used
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => (
+        <div className="flex justify-end">
+          <Button variant="ghost" size="icon">
+            <Info className="h-4 w-4" />
+          </Button>
+          {row.original.type === "user" && (
+            <Button variant="ghost" size="icon" className="text-destructive">
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      ),
+    },
+  ];
 
-  const handleSelectTemplate = (templateId: string, checked: boolean) => {
-    if (checked) {
-      setSelectedTemplates([...selectedTemplates, templateId]);
-    } else {
-      setSelectedTemplates(selectedTemplates.filter(id => id !== templateId));
-    }
-  };
+  const filteredTemplates = useMemo(() => {
+    return exampleTemplates.filter(template => template.type === filter);
+  }, [filter]);
 
-  const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedTemplates(filteredTemplates.map(template => template.id));
-    } else {
-      setSelectedTemplates([]);
-    }
+  const handleRowSelectionChange = (selection: Record<string, boolean>) => {
+    setSelectedTemplates(
+      Object.keys(selection).map(key => filteredTemplates[parseInt(key)].id)
+    );
   };
 
   const handleExport = () => {
@@ -117,7 +158,7 @@ export function SchemaList() {
       onClick: handleDelete,
       variant: "destructive" as const,
       disabled: selectedTemplates.some(id => 
-        templates.find(template => template.id === id)?.type === "default"
+        exampleTemplates.find(template => template.id === id)?.type === "default"
       ),
     },
   ];
@@ -160,9 +201,15 @@ export function SchemaList() {
                   <div className="flex items-center gap-4 mb-4">
                     <Checkbox
                       checked={selectedTemplates.includes(template.id)}
-                      onCheckedChange={(checked) => 
-                        handleSelectTemplate(template.id, checked as boolean)
-                      }
+                      onCheckedChange={(checked) => {
+                        const selectedSet = new Set(selectedTemplates);
+                        if (checked) {
+                          selectedSet.add(template.id);
+                        } else {
+                          selectedSet.delete(template.id);
+                        }
+                        setSelectedTemplates(Array.from(selectedSet));
+                      }}
                     />
                     <h3 className="text-lg font-semibold flex-1">{template.name}</h3>
                     <div className="flex gap-2">
@@ -195,85 +242,14 @@ export function SchemaList() {
             ))}
           </div>
         ) : (
-          <div 
-            key="table-view"
-            className="rounded-md border bg-card animate-in fade-in-0 duration-200"
-          >
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-muted/50">
-                  <TableHead className="w-[50px]">
-                    <Checkbox
-                      checked={selectedTemplates.length === filteredTemplates.length}
-                      onCheckedChange={handleSelectAll}
-                    />
-                  </TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Fields</TableHead>
-                  <TableHead>Documents</TableHead>
-                  <TableHead>Last Used</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredTemplates.map((template) => (
-                  <TableRow key={template.id} className="hover:bg-muted/50">
-                    <TableCell>
-                      <Checkbox
-                        checked={selectedTemplates.includes(template.id)}
-                        onCheckedChange={(checked) => 
-                          handleSelectTemplate(template.id, checked as boolean)
-                        }
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium">{template.name}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {template.fields.map((field) => (
-                          <Badge key={field} variant="secondary">
-                            {field}
-                          </Badge>
-                        ))}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{template.documentCount}</TableCell>
-                    <TableCell className="text-muted-foreground">{template.lastUsed}</TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Info className="mr-2 h-4 w-4" />
-                            View Details
-                          </DropdownMenuItem>
-                          {template.type === "user" && (
-                            <DropdownMenuItem>
-                              <Settings className="mr-2 h-4 w-4" />
-                              Edit Template
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem>
-                            <Download className="mr-2 h-4 w-4" />
-                            Export Template
-                          </DropdownMenuItem>
-                          {template.type === "user" && (
-                            <DropdownMenuItem className="text-destructive">
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete Template
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <DataTable 
+            columns={columns} 
+            data={filteredTemplates}
+            onRowSelectionChange={handleRowSelectionChange}
+            searchKey="name"
+            searchPlaceholder="Search templates..."
+            bordered={true}
+          />
         )}
       </div>
 

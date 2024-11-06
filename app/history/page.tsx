@@ -22,7 +22,7 @@ export default function HistoryPage() {
         </div>
 
         <div className="flex space-x-2">
-          {(['all', 'queued', 'processing', 'completed', 'failed'] as const).map(status => (
+          {(['all', 'processing', 'completed', 'failed'] as const).map(status => (
             <Button
               key={status}
               variant={filter === status ? "secondary" : "ghost"}
