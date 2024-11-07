@@ -6,7 +6,8 @@ WORKDIR /app
 FROM base AS deps
 # Add certificates to the system
 COPY mycerts.crt /usr/local/share/ca-certificates/mycerts.crt
-RUN apk add --no-cache ca-certificates && \
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
     update-ca-certificates
 
 COPY package.json ./
@@ -18,7 +19,8 @@ FROM base AS builder
 WORKDIR /app
 # Add certificates to the builder stage as well
 COPY mycerts.crt /usr/local/share/ca-certificates/mycerts.crt
-RUN apk add --no-cache ca-certificates && \
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
     update-ca-certificates
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -40,12 +42,13 @@ ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 # Add certificates to the runner stage
 COPY mycerts.crt /usr/local/share/ca-certificates/mycerts.crt
-RUN apk add --no-cache ca-certificates && \
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
     update-ca-certificates
 
 # Create a non-root user
-RUN addgroup --system --gid 1001 bunjs
-RUN adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 bunjs && \
+    useradd --system --uid 1001 --gid bunjs nextjs
 
 # Copy built files
 COPY --from=builder /app/public ./public
