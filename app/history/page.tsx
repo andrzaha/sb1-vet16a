@@ -1,8 +1,15 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { DashboardShell } from "@/components/shell";
-import { HistoryList } from "@/components/history/history-list";
+
+// Dynamically import HistoryList with no SSR to prevent worker-related issues
+const HistoryList = dynamic(
+  () => import("@/components/history/history-list").then(mod => mod.HistoryList),
+  { ssr: false }
+);
+
 import { Button } from "@/components/ui/button";
 
 export default function HistoryPage() {

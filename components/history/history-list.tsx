@@ -16,7 +16,14 @@ import {
 } from "@tanstack/react-table";
 
 import { DataTable } from "@/components/shared/data-table";
-import { FilePreview } from "@/components/processor/file-preview";
+import dynamic from "next/dynamic";
+
+// Dynamically import FilePreview with no SSR
+const FilePreview = dynamic(
+  () => import("@/components/processor/file-preview").then(mod => mod.FilePreview),
+  { ssr: false }
+);
+
 import { getStatusIcon } from "@/components/processor/status-utils";
 import { ProcessingFile } from "@/components/processor/types";
 import { FloatingActionPill } from "@/components/shared/floating-action-pill";
@@ -28,7 +35,8 @@ interface HistoryListProps {
   filter: string;
 }
 
-export function HistoryList({ filter }: HistoryListProps) {
+// Export as default to work with dynamic import
+export default function HistoryList({ filter }: HistoryListProps) {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
   const [searchTerm] = useState("");
   const [selectedFile, setSelectedFile] = useState<ProcessingFile | null>(null);
@@ -239,3 +247,6 @@ export function HistoryList({ filter }: HistoryListProps) {
     </>
   );
 }
+
+// Also export named for backwards compatibility
+export { HistoryList };
