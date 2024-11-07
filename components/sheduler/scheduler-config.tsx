@@ -82,7 +82,7 @@ export function SchedulerConfig({ open, onOpenChange }: SchedulerConfigProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="overflow-y-auto max-h-[85vh]">
+      <SheetContent className="h-full overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Configure Processing Job</SheetTitle>
           <SheetDescription>
