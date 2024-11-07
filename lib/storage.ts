@@ -12,10 +12,13 @@ export class StorageService {
   async uploadToS3(file: File, bucket: string, key: string) {
     if (!this.s3Client) throw new Error("S3 client not initialized");
 
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
     const command = new PutObjectCommand({
       Bucket: bucket,
       Key: key,
-      Body: await file.arrayBuffer(),
+      Body: buffer,
       ContentType: file.type,
     });
 
@@ -28,7 +31,10 @@ export class StorageService {
     const containerClient = this.blobClient.getContainerClient(containerName);
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-    return blockBlobClient.uploadData(await file.arrayBuffer(), {
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    return blockBlobClient.uploadData(buffer, {
       blobHTTPHeaders: { blobContentType: file.type },
     });
   }
