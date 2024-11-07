@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/sidebar"
 import { cn } from '@/lib/utils';
 import { JetBrains_Mono } from "next/font/google";
 import { Courier_Prime } from 'next/font/google'
-import { SettingsProvider } from '@/lib/settings';
+import { SettingsProvider } from './providers/settings-provider'
 
 const inter = Inter({ subsets: ['latin'] });
 const jetbrainsMono = JetBrains_Mono({ 
@@ -42,7 +42,7 @@ export default function RootLayout({
         jetbrainsMono.variable
       )}>
         <ThemeProvider
-          attribute="data-theme"
+          attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
