@@ -152,40 +152,46 @@ export function FilePreview({
         )}
       </div>
 
-      <ScrollArea className="flex-1 p-4">
+      <ScrollArea className="flex-1 p-4 w-full">
         {file ? (
-          <div className="space-y-4">
+          <div className="space-y-4 min-w-full">
             {viewMode === 'original' && (
-              <div className="relative aspect-[3/4] bg-muted rounded-lg overflow-hidden">
-                <Image
-                  src="/examples/sample-image.jpg"
-                  alt="Document preview"
-                  fill
-                  className="object-cover"
-                  priority
-                />
+              <div className="relative w-full overflow-auto">
+                <div className="min-h-[300px] h-[calc(100vh-250px)] relative">
+                  <Image
+                    src="/examples/sample-image.jpg"
+                    alt="Document preview"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               </div>
             )}
             {viewMode === 'markdown' && (
-              <article className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-a:text-blue-600 hover:prose-a:text-blue-500">
-                <ReactMarkdown 
-                  remarkPlugins={[remarkGfm]}
-                  components={markdownComponents}
-                >
-                  {file?.output?.markdown || sampleMarkdown}
-                </ReactMarkdown>
-              </article>
+              <div className="min-w-full overflow-x-auto">
+                <article className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-semibold prose-a:text-blue-600 hover:prose-a:text-blue-500">
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={markdownComponents}
+                  >
+                    {file?.output?.markdown || sampleMarkdown}
+                  </ReactMarkdown>
+                </article>
+              </div>
             )}
             {viewMode === 'structured' && (
-              <pre className="bg-muted p-4 rounded-lg overflow-auto">
-                <code className="text-sm">
-                  {JSON.stringify(
-                    file?.output?.structured || sampleJson,
-                    null,
-                    2
-                  )}
-                </code>
-              </pre>
+              <div className="min-w-full h-[calc(100vh-250px)] overflow-auto">
+                <pre className="p-4 rounded-lg">
+                  <code className="text-sm text-foreground">
+                    {JSON.stringify(
+                      file?.output?.structured || sampleJson,
+                      null,
+                      2
+                    )}
+                  </code>
+                </pre>
+              </div>
             )}
           </div>
         ) : (
