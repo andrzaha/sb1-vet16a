@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --turbo",
     "lint": "next lint",
     "test": "bun test",
     "test:watch": "bun test --watch",
