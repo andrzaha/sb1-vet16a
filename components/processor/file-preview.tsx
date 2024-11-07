@@ -1,12 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { FileText, ChevronRight, X, Download, Share2 } from 'lucide-react'
+import { FileText, X, Download, Share2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { cn } from "@/lib/utils"
 import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'

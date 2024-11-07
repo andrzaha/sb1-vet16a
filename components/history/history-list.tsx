@@ -30,7 +30,7 @@ interface HistoryListProps {
 
 export function HistoryList({ filter }: HistoryListProps) {
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [selectedFile, setSelectedFile] = useState<ProcessingFile | null>(null);
   const [showFileResults, setShowFileResults] = useState(false);
 

@@ -1,12 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { 
-  ArrowUpDown, Search 
-} from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Checkbox } from '@/components/ui/checkbox'
 import { 
   Table, 
   TableBody, 

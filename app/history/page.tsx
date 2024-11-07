@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo } from "react";
+import { useState } from "react";
 import { DashboardShell } from "@/components/shell";
 import { HistoryList } from "@/components/history/history-list";
 import { Button } from "@/components/ui/button";
