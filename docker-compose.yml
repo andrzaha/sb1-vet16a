@@ -6,6 +6,4 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - BUN_JSC_jitPolicyWeight=0.5
-      - BUN_JSC_thresholdForOptimizeSoon=100
     restart: unless-stopped 
