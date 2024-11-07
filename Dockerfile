@@ -4,17 +4,29 @@ WORKDIR /app
 
 # Install dependencies
 FROM base AS deps
+# Add certificates to the system
+COPY mycerts.crt /usr/local/share/ca-certificates/mycerts.crt
+RUN apk add --no-cache ca-certificates && \
+    update-ca-certificates
+
 COPY package.json ./
 COPY bun.lockb ./
 RUN bun install --frozen-lockfile
 
 # Build the application
 FROM base AS builder
+WORKDIR /app
+# Add certificates to the builder stage as well
+COPY mycerts.crt /usr/local/share/ca-certificates/mycerts.crt
+RUN apk add --no-cache ca-certificates && \
+    update-ca-certificates
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Next.js collects anonymous telemetry data about general usage - disable it
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 RUN bun run build
 
@@ -24,6 +36,12 @@ WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+
+# Add certificates to the runner stage
+COPY mycerts.crt /usr/local/share/ca-certificates/mycerts.crt
+RUN apk add --no-cache ca-certificates && \
+    update-ca-certificates
 
 # Create a non-root user
 RUN addgroup --system --gid 1001 bunjs
