@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Laptop } from "lucide-react";
 import { toast } from "sonner";
-import { useSettings } from '@/lib/settings';
+import { useSettings } from "@/app/providers/settings-provider";
 import { useState } from "react";
 
 export function Settings() {
@@ -192,4 +192,4 @@ export function Settings() {
       </div>
     </div>
   );
-} 
+}
